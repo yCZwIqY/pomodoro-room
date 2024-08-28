@@ -13,6 +13,7 @@ export default function Room() {
             position: [10, 3, 13],
             // rotation:[0, 0, THREE.MathUtils.degToRad(45)]
         }}>
+            <color attach="background" args={['darkGrey']}/>
             <OrbitControls
                 minAzimuthAngle={-Math.PI / 2}
                 maxAzimuthAngle={Math.PI / 2}
