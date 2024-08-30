@@ -1,70 +1,48 @@
-import {ChangeEventHandler, useState} from "react";
-import {IconButton, SmallIconButton} from "@components/common";
 import styled from "styled-components";
-import STYLE from '@styles/variables.ts';
-import {ChangeHandler} from "react-hook-form";
+import IconButton from "@components/common/button/IconButton.tsx";
 
-const TimeInputContainer = styled.div`
+
+const TimeInputContainer = styled.h3`
     display: flex;
     align-items: center;
-    //border: 2px solid white;
-    border-radius: 5px;
+    margin: 10px 0;
 `
-const TimeLabel = styled.p`
-    display: flex;
+
+const TimeLabel = styled.div`
+    margin: 0 10px;
+    padding: 10px;
+    width: 50px;
     justify-content: center;
     align-items: center;
-    font-size: ${STYLE.fontSize.md};
-    width: 40px;
-    height: 30px;
-    color: black;
-    background: white;
+    font-size: ${({theme}) => theme.fontSize.lg};
+    color: ${({theme}) => theme.colors['text-accent']};
+    background: ${({theme}) => theme.colors['sub-base']};
     border-radius: 20px;
-
+    text-align: center;
 `
-const TimerUnitLabel = styled.p`
-    margin-right: 10px;
-`
-
-const ArrowButton = styled(IconButton)`
-    border: 2px solid white;
-    border-radius: 20px;
-    margin: 0 5px;
+const UnitLabel = styled.div`
+    color: ${({theme}) => theme.colors.text};
+    margin-left: 10px;
 `
 
 interface TimeInputProps {
     unit: string;
-    value: number;
-    onChange: (value: number) => void;
+    label: string
 }
-
-export default function TimeInput({unit, value, onChange}: TimeInputProps) {
+export default function TimeInput({unit, label}: TimeInputProps) {
 
     const onButtonClick = (dir) => {
-        if (dir > 100) {
-            return;
-        }
-        onChange(value + (5 * dir))
+
     }
 
-    return <div style={{display: 'flex', alignItems: 'center', marginRight: '5px'}}>
-        <TimeInputContainer>
-            <ArrowButton url={'/icons/arrow-down.svg'}
-                         type={'button'}
-                         disabled={value <= 0}
-                         onClick={(e) => onButtonClick(-1)}/>
-            <TimeLabel>
-                {value}
-            </TimeLabel>
-            <ArrowButton url={'/icons/arrow-up.svg'}
-                         type={'button'}
-                         disabled={value >= 100}
-                         onClick={(e) => onButtonClick(1)}/>
-
-
-        </TimeInputContainer>
-        <TimerUnitLabel>
-            {unit}
-        </TimerUnitLabel>
-    </div>
+    return <TimeInputContainer>
+        <IconButton url={'/icons/arrow-down.svg'} disabled={false} buttonColor={'red'}/>
+        <TimeLabel>
+            {0}
+        </TimeLabel>
+        <IconButton url={'/icons/arrow-up.svg'} disabled={false}/>
+        <UnitLabel>
+            {unit} {label}
+        </UnitLabel>
+    </TimeInputContainer>
 }

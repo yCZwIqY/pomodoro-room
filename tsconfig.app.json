@@ -24,9 +24,9 @@
     /*  Absolute Path */
     "baseUrl": ".",
     "paths": {
-//      "@/*": [
-//        "./src/*"
-//      ],
+      //      "@/*": [
+      //        "./src/*"
+      //      ],
       "@components/*": [
         "./src/components/*"
       ],
@@ -39,9 +39,11 @@
       "@styles/*": [
         "./src/styles/*"
       ]
-    }
+    },
+    "types": [
+      "@types/styled-components"
+    ]
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "build"]
 }
