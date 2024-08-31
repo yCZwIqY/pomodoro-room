@@ -1,11 +1,12 @@
 import styled from 'styled-components';
+import { MouseEventHandler } from 'react';
 
 export const IconButtonContainer = styled.button`
   background: ${({ url }) => `url("${url}") center/70% no-repeat`};
-  background-color: ${({ theme, buttonColor }) =>
-    `${theme.buttonColors[buttonColor].bg}`};
-  box-shadow: ${({ theme, buttonColor }) =>
-    `0 5px 1px ${theme.buttonColors[buttonColor].shadow}`};
+  background-color: ${({ theme, $buttonColor }) =>
+    `${theme.buttonColors[$buttonColor].bg}`};
+  box-shadow: ${({ theme, $buttonColor }) =>
+    `0 5px 1px ${theme.buttonColors[$buttonColor].shadow}`};
   width: 30px;
   height: 30px;
   border: 3px solid white;
@@ -15,8 +16,8 @@ export const IconButtonContainer = styled.button`
   border-radius: 100%;
 
   &:active {
-    background-color: ${({ theme, buttonColor }) =>
-      `${theme.buttonColors[buttonColor].shadow}`};
+    background-color: ${({ theme, $buttonColor }) =>
+      `${theme.buttonColors[$buttonColor].shadow}`};
     backdrop-filter: grayscale(50);
     color: #d0b2b2;
     opacity: 0.5;
@@ -31,10 +32,10 @@ export const IconButtonContainer = styled.button`
     &:active {
       transform: initial;
       background: ${({ url }) => `url("${url}") center/70% no-repeat`};
-      background-color: ${({ theme, buttonColor }) =>
-        `${theme.buttonColors[buttonColor].bg}`};
-      box-shadow: ${({ theme, buttonColor }) =>
-        `0 5px 1px ${theme.buttonColors[buttonColor].shadow}`};
+      background-color: ${({ theme, $buttonColor }) =>
+        `${theme.buttonColors[$buttonColor].bg}`};
+      box-shadow: ${({ theme, $buttonColor }) =>
+        `0 5px 1px ${theme.buttonColors[$buttonColor].shadow}`};
     }
   }
 `;
@@ -43,6 +44,7 @@ interface IconButtonProps {
   url: string;
   disabled?: boolean;
   buttonColor?: ButtonColor;
+  onClick: MouseEventHandler;
 }
 
 type ButtonColor = 'red' | 'green' | 'purple' | 'yellow' | 'blue' | 'pink';
@@ -50,13 +52,16 @@ type ButtonColor = 'red' | 'green' | 'purple' | 'yellow' | 'blue' | 'pink';
 export default function IconButton({
   url,
   disabled = false,
-  buttonColor = 'blue'
+  buttonColor = 'blue',
+  onClick
 }: IconButtonProps) {
   return (
     <IconButtonContainer
       url={url}
-      buttonColor={buttonColor}
+      type={'button'}
+      $buttonColor={buttonColor}
       disabled={disabled}
+      onClick={onClick}
     />
   );
 }

@@ -27,9 +27,31 @@ const UnitLabel = styled.div`
 interface TimeInputProps {
   unit: string;
   label: string;
+  value: number;
+  onChange: (value: number) => void;
+  step?: number;
+  maxValue?: number;
+  minValue?: number;
 }
-export default function TimeInput({ unit, label }: TimeInputProps) {
-  const onButtonClick = (dir) => {};
+
+export default function TimeInput({
+  unit,
+  label,
+  value,
+  onChange,
+  step = 5,
+  maxValue,
+  minValue
+}: TimeInputProps) {
+  const onButtonClick = (dir) => {
+    if (value <= minValue && dir < 0) {
+      return;
+    }
+    if (value >= maxValue && dir > 0) {
+      return;
+    }
+    onChange(value + dir * step);
+  };
 
   return (
     <TimeInputContainer>
@@ -37,9 +59,14 @@ export default function TimeInput({ unit, label }: TimeInputProps) {
         url={'/icons/arrow-down.svg'}
         disabled={false}
         buttonColor={'red'}
+        onClick={() => onButtonClick(-1)}
       />
-      <TimeLabel>{0}</TimeLabel>
-      <IconButton url={'/icons/arrow-up.svg'} disabled={false} />
+      <TimeLabel>{value}</TimeLabel>
+      <IconButton
+        url={'/icons/arrow-up.svg'}
+        disabled={false}
+        onClick={() => onButtonClick(1)}
+      />
       <UnitLabel>
         {unit} {label}
       </UnitLabel>

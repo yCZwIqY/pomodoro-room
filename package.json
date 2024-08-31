@@ -12,6 +12,7 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@hookform/error-message": "^2.0.1",
     "@react-three/drei": "^9.111.3",
     "@react-three/fiber": "^8.17.5",
     "@storybook/addon-themes": "^8.2.9",

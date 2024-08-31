@@ -1,11 +1,13 @@
 const colors = {
   primary: '#9F51FE',
   secondary: '#6F53FD',
-  base: '#BC93FF',
+  base: '#A77DFE',
   shadow: '#D1D8FF',
   'sub-base': '#C2FDFF',
   text: '#60CFFF',
-  'text-accent': '#228AED'
+  'text-accent': '#228AED',
+  'pink-shadow': '#B20D78',
+  yellow: '#FFC90C'
 };
 
 const fontSize = {
@@ -18,7 +20,8 @@ const fontSize = {
 const gradiant = {
   linear: `linear-gradient(0deg, ${colors.primary}, ${colors.secondary})`,
   'linear-4': `linear-gradient(90deg, ${colors.primary}, ${colors.secondary}, ${colors.primary}, ${colors.secondary}, ${colors.primary})`,
-  radial: `radial-gradient(circle, ${colors.primary}, ${colors.secondary})`
+  radial: `radial-gradient(circle, ${colors.primary}, ${colors.secondary})`,
+  'pink-linear': `linear-gradient(0deg, #FBDBFF, #FF7AD8)`
 };
 
 const buttonColors = {

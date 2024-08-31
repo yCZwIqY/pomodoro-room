@@ -3,6 +3,7 @@ import RoomModel from '@components/room/model/RoomModel.tsx';
 import { OrbitControls } from '@react-three/drei';
 import styled, { keyframes } from 'styled-components';
 import Timer from '@components/ui/timer/Timer.tsx';
+import Token from '@components/ui/Token.tsx';
 
 const roomBgMove = keyframes`
     0% {
@@ -35,9 +36,9 @@ export default function Room() {
     <RoomContainer>
       <Canvas
         camera={{
-          zoom: 0.8,
-          near: 0.1,
-          far: 1000,
+          zoom: 0.3,
+          near: 1,
+          far: 100,
           fov: 20,
           position: [10, 3, 13]
           // rotation:[0, 0, THREE.MathUtils.degToRad(45)]
@@ -49,7 +50,7 @@ export default function Room() {
           maxAzimuthAngle={Math.PI / 2}
           minPolarAngle={Math.PI / 6}
           maxPolarAngle={Math.PI / 2}
-          minDistance={15}
+          minDistance={10}
           maxDistance={35}
         />
         {/*<gridHelper/>*/}
@@ -58,6 +59,7 @@ export default function Room() {
         <RoomModel />
       </Canvas>
       <Timer />
+      <Token />
     </RoomContainer>
   );
 }
