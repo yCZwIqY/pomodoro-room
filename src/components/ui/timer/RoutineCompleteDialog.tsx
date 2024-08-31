@@ -56,7 +56,7 @@ const showAnimation = keyframes`
 
 const AnimationContainer = styled.div`
   opacity: 0;
-  animation: ${showAnimation} .3s linear 0.5s forwards;
+  animation: ${showAnimation} 0.3s linear 0.5s forwards;
 `;
 
 const RotatingToken = ({ scene }) => {

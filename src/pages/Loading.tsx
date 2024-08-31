@@ -1,5 +1,5 @@
-import styled, {keyframes} from "styled-components";
-import {useEffect, useState} from "react";
+import styled, { keyframes } from 'styled-components';
+import { useEffect, useState } from 'react';
 
 const roomBgMove = keyframes`
     0% {
@@ -11,31 +11,31 @@ const roomBgMove = keyframes`
 `;
 
 const LoadingContainer = styled.main`
-    width: 100dvw;
-    height: 100dvh;
-    overflow: hidden;
-    position: relative;
+  width: 100dvw;
+  height: 100dvh;
+  overflow: hidden;
+  position: relative;
 `;
 
 const LoadingBackground = styled.div`
-    width: 200%;
-    height: 100%;
-    background: ${(props) => props.theme.gradiant.linear};
-    animation: ${roomBgMove} 5s linear infinite;
-    position: absolute;
-    z-index: -5;
+  width: 200%;
+  height: 100%;
+  background: ${(props) => props.theme.gradiant.linear};
+  animation: ${roomBgMove} 5s linear infinite;
+  position: absolute;
+  z-index: -5;
 `;
 const LoadingBarContainer = styled.div`
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    font-size: 58px;
-    text-shadow: 0 4px 1px ${({theme}) => theme.colors.shadow};
-    -webkit-text-stroke: 1px ${({theme}) => theme.colors.shadow};
-`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 58px;
+  text-shadow: 0 4px 1px ${({ theme }) => theme.colors.shadow};
+  -webkit-text-stroke: 1px ${({ theme }) => theme.colors.shadow};
+`;
 const dotAnimation = keyframes`
     0% {
         width: 0;
@@ -64,27 +64,22 @@ const dotAnimation = keyframes`
     100% {
         width: 0;
     }
-`
+`;
 
 const DotWrapper = styled.div`
-    animation: ${dotAnimation} 1s linear infinite;
-    overflow: hidden;
-`
+  animation: ${dotAnimation} 1s linear infinite;
+  overflow: hidden;
+`;
 export default function Loading() {
-
-    return <LoadingContainer>
-        <LoadingBackground>
-        </LoadingBackground>
-        <LoadingBarContainer>
-            <div>
-                LOADING
-            </div>
-            <div style={{width: '65px', overflow: 'hidden'}}>
-                <DotWrapper>
-                    ...
-                </DotWrapper>
-            </div>
-        </LoadingBarContainer>
-
-    </LoadingContainer>;
+  return (
+    <LoadingContainer>
+      <LoadingBackground></LoadingBackground>
+      <LoadingBarContainer>
+        <div>LOADING</div>
+        <div style={{ width: '65px', overflow: 'hidden' }}>
+          <DotWrapper>...</DotWrapper>
+        </div>
+      </LoadingBarContainer>
+    </LoadingContainer>
+  );
 }

@@ -54,6 +54,6 @@ const buttonColors = {
 const device = {
   mobile: `screen and (max-width: 375px)`,
   tablet: `screen and (max-width: 768px)`,
-  laptop: `screen and (max-width: 1024px)`,
-}
+  laptop: `screen and (max-width: 1024px)`
+};
 export default { colors, fontSize, gradiant, buttonColors, device };
