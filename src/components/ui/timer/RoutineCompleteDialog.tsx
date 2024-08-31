@@ -48,18 +48,6 @@ const showAnimation = keyframes`
         opacity: 0;
         transform: scale3d(.3, .3, .3)
     }
-    20% {
-        transform: scale3d(1.1, 1.1, 1.1)
-    }
-    40% {
-        transform: scale3d(.9, .9, .9)
-    }
-    60% {
-        transform: scale3d(1.03, 1.03, 1.03)
-    }
-    80% {
-        transform: scale3d(.97, .97, .97)
-    }
     100% {
         opacity: 1;
         transform: scale3d(1, 1, 1)
@@ -68,10 +56,10 @@ const showAnimation = keyframes`
 
 const AnimationContainer = styled.div`
   opacity: 0;
-  animation: ${showAnimation} 2s linear 0.5s forwards;
+  animation: ${showAnimation} .3s linear 0.5s forwards;
 `;
 
-const RotatingScene = ({ scene }) => {
+const RotatingToken = ({ scene }) => {
   const ref = useRef<THREE.Group>(null!);
   const [startTime, setStartTime] = useState<number | null>(null);
 
@@ -131,7 +119,7 @@ export default forwardRef(function RoutineCompleteDialog(
                     0
                   ]}
                 >
-                  <RotatingScene scene={scene} />
+                  <RotatingToken scene={scene} />
                 </group>
               </Canvas>
             }
