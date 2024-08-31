@@ -18,7 +18,7 @@ const fontSize = {
 };
 
 const gradiant = {
-  linear: `linear-gradient(0deg, ${colors.primary}, ${colors.secondary})`,
+  linear: `linear-gradient(90deg, ${colors.primary}, ${colors.secondary})`,
   'linear-4': `linear-gradient(90deg, ${colors.primary}, ${colors.secondary}, ${colors.primary}, ${colors.secondary}, ${colors.primary})`,
   radial: `radial-gradient(circle, ${colors.primary}, ${colors.secondary})`,
   'pink-linear': `linear-gradient(0deg, #FBDBFF, #FF7AD8)`
