@@ -38,8 +38,8 @@ const buttonColors = {
     shadow: '#8014EE'
   },
   yellow: {
-    bg: '#FFF635',
-    shadow: '#FFC90C'
+    bg: '#ffd816',
+    shadow: '#ffb20c'
   },
   blue: {
     bg: '#4CDAFE',

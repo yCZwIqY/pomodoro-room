@@ -7,7 +7,10 @@ import { useThree } from '@react-three/fiber';
 import { Texture } from 'three';
 import useMyFurnitureStore from '@store/furnitureStore.ts';
 
-export default function RoomModel() {
+interface RoomModelProps {
+  editMode: boolean
+}
+export default function RoomModel({editMode}: RoomModelProps) {
   const wallGroupRef = useRef<THREE.Mesh>(null);
   const lightRef = useRef<THREE.SpotLight>(null);
   const furnitureGroupRef = useRef<THREE.Group>(null);
