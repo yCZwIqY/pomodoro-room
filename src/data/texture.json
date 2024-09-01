@@ -1,11 +1,8 @@
 {
   "furniture": {
-    "bed": {
-    },
-    "chair": {
-    },
-    "desk": {
-    }
+    "bed": {},
+    "chair": {},
+    "desk": {}
   },
   "wallpaper": {
     "basic_wallpaper": {

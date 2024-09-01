@@ -7,8 +7,8 @@ export const IconButtonContainer = styled.button`
     `${theme.buttonColors[$buttonColor].bg}`};
   box-shadow: ${({ theme, $buttonColor }) =>
     `0 5px 1px ${theme.buttonColors[$buttonColor].shadow}`};
-  width: 30px;
-  height: 30px;
+  width: ${({ size }) => `${size}`};
+  height: ${({ size }) => `${size}`};
   border: 3px solid white;
   outline: none;
   display: inline-block;
@@ -50,6 +50,7 @@ interface IconButtonProps {
   disabled?: boolean;
   buttonColor?: ButtonColor;
   onClick: MouseEventHandler;
+  size?: string;
 }
 
 type ButtonColor = 'red' | 'green' | 'purple' | 'yellow' | 'blue' | 'pink';
@@ -58,7 +59,8 @@ export default function IconButton({
   url,
   disabled = false,
   buttonColor = 'blue',
-  onClick
+  onClick,
+  size = '30px'
 }: IconButtonProps) {
   return (
     <IconButtonContainer
@@ -67,6 +69,7 @@ export default function IconButton({
       $buttonColor={buttonColor}
       disabled={disabled}
       onClick={onClick}
+      size={size}
     />
   );
 }

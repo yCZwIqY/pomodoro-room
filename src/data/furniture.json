@@ -6,11 +6,7 @@
       "path": "bed/basic_bed.glb",
       "category": "furniture/bed",
       "position": [3.8, 0, -3],
-      "rotation": [
-        0,
-        0,
-        0
-      ],
+      "rotation": [0, 0, 0],
       "hasTexture": false
     }
   },
@@ -32,11 +28,7 @@
       "path": "desk/basic_desk.glb",
       "category": "furniture/desk",
       "position": [-3, 0, -4],
-      "rotation": [
-        0,
-        0,
-        0
-      ],
+      "rotation": [0, 0, 0],
       "hasTexture": false
     }
   }

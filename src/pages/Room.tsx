@@ -4,6 +4,7 @@ import { OrbitControls } from '@react-three/drei';
 import styled, { keyframes } from 'styled-components';
 import Timer from '@components/ui/timer/Timer.tsx';
 import Token from '@components/ui/Token.tsx';
+import IconButton from '@components/common/button/IconButton.tsx';
 
 const roomBgMove = keyframes`
     0% {
@@ -31,7 +32,21 @@ const RoomContainer = styled.main`
     z-index: -1;
   }
 `;
+
+const SideNav = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  position: absolute;
+  left: 10px;
+  top: 60px;
+  height: 100dvh;
+`;
+
 export default function Room() {
+  const onClickEdit = () => {};
+
+  const onClickShop = () => {};
   return (
     <RoomContainer>
       <Canvas
@@ -60,6 +75,20 @@ export default function Room() {
       </Canvas>
       <Timer />
       <Token />
+      <SideNav>
+        <IconButton
+          url={'/icons/edit-move.svg'}
+          onClick={onClickEdit}
+          buttonColor={'pink'}
+          size={'40px'}
+        />
+        <IconButton
+          url={'/icons/shop.svg'}
+          onClick={onClickShop}
+          buttonColor={'blue'}
+          size={'40px'}
+        />
+      </SideNav>
     </RoomContainer>
   );
 }
