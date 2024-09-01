@@ -5,7 +5,7 @@ const useTokenStore = create((set) => ({
   initToken: () =>
     set(() => {
       const token = parseInt(localStorage.getItem('token')?.toString() ?? '');
-      return { token: isNaN(token)? 0 : token };
+      return { token: isNaN(token) ? 0 : token };
     }),
   addToken: (num) =>
     set((state) => {

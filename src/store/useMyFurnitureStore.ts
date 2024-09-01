@@ -56,7 +56,7 @@ const useMyFurnitureStore = create<FurnitureDataStore>((set) => ({
               furniture.desk['basic_desk']
             ],
             wallpaper: texture.wallpaper['basic_wallpaper'],
-            texture: texture.tile['basic_tile']
+            tile: texture.tile['basic_tile']
           }
         };
 

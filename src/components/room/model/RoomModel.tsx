@@ -8,9 +8,9 @@ import { Texture } from 'three';
 import useMyFurnitureStore from '@store/useMyFurnitureStore.ts';
 
 interface RoomModelProps {
-  editMode: boolean
+  editMode: boolean;
 }
-export default function RoomModel({editMode}: RoomModelProps) {
+export default function RoomModel({ editMode }: RoomModelProps) {
   const wallGroupRef = useRef<THREE.Mesh>(null);
   const lightRef = useRef<THREE.SpotLight>(null);
   const furnitureGroupRef = useRef<THREE.Group>(null);
@@ -20,12 +20,16 @@ export default function RoomModel({editMode}: RoomModelProps) {
   const { myFurniture } = useMyFurnitureStore();
 
   useHelper(lightRef, THREE.SpotLightHelper);
+
   useEffect(() => {
-    loadTexture(
-      '/textures/wallpaper/basic_wallpaper.png',
-      '/textures/tile/basic_tile.png'
-    );
-  }, []);
+    if (myFurniture) {
+      console.log();
+      loadTexture(
+        `/textures/${myFurniture.wallpaper.path}`,
+        `/textures/${myFurniture.tile.path}`
+      );
+    }
+  }, [myFurniture]);
 
   useEffect(() => {
     if (furnitureGroupRef) {
