@@ -11,6 +11,8 @@ export default defineConfig({
           {find: '@pages', replacement: '/src/pages'},
           {find: '@assets', replacement: '/src/assets'},
           {find: '@styles', replacement: '/src/styles'},
+          {find: '@data', replacement: '/src/data'},
+          {find: '@store', replacement: '/src/store'},
       ]
     }
 })

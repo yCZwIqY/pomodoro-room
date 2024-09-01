@@ -1,0 +1,28 @@
+{
+  "furniture": {
+    "bed": {
+    },
+    "chair": {
+    },
+    "desk": {
+    }
+  },
+  "wallpaper": {
+    "basic_wallpaper": {
+      "id": "basic_wallpaper",
+      "name": "기본 벽지",
+      "path": "wallpaper/basic_wallpaper.png",
+      "category": "texture/wallpaper",
+      "hasTexture": false
+    }
+  },
+  "tile": {
+    "basic_tile": {
+      "id": "basic_tile",
+      "name": "기본 바닥",
+      "path": "tile/basic_tile.png",
+      "category": "texture/tile",
+      "hasTexture": false
+    }
+  }
+}

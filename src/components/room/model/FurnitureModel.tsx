@@ -1,18 +1,33 @@
-import { useGLTF } from '@react-three/drei';
-import { useEffect, useState } from 'react';
-import * as THREE from 'three';
+import {useGLTF} from '@react-three/drei';
+import {useState} from 'react';
+import * as THREE from 'three'
+import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
+import {useLoader} from "@react-three/fiber";
 
 interface FurnitureModelProps {
-  path: string;
+    path: string;
+    initialPosition?: number[];
+    initialRotation?: number[];
 }
 
-export default function FurnitureModel({ path }: FurnitureModelProps) {
-  const { scene } = useGLTF(path);
-  const [position, setPosition] = useState([0, 0.6, 2]);
+export default function FurnitureModel({
+                                           initialPosition = [0, 0, 0],
+                                           initialRotation = [0, 0, 0],
+                                           path
+                                       }: FurnitureModelProps) {
+    const {scene} = useLoader(GLTFLoader, `/models/furniture/${path}`)
+    // const {scene} = useGLTF();
+    const [position, setPosition] = useState(initialPosition);
+    const [rotation, setRotation] = useState(initialRotation);
 
-  return (
-    <group position={position}>
-      <primitive object={scene} />
-    </group>
-  );
+    const convertedRotation = () => rotation.map(it => THREE.MathUtils.degToRad(it));
+
+    return (
+        <>
+            {path && <group position={position} rotation={convertedRotation()}>
+              <primitive object={scene}/>
+            </group>}
+        </>
+
+    );
 }
