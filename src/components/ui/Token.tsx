@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import useTokenStore from '../../store/tokenStore.tsx';
+import useTokenStore from '@store/useTokenStore.tsx';
 
 const TokenContainer = styled.div`
   position: absolute;

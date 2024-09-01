@@ -3,7 +3,7 @@ import TimerForm from '@components/ui/timer/TimerForm.tsx';
 import { useRef, useState } from 'react';
 import Button from '@components/common/button/Button.tsx';
 import RoutineCompleteDialog from '@components/ui/timer/RoutineCompleteDialog.tsx';
-import useTokenStore from '../../../store/tokenStore.tsx';
+import useTokenStore from '@store/useTokenStore.tsx';
 
 export const TimerContainer = styled.details`
   position: absolute;

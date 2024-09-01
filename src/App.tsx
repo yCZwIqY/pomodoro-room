@@ -4,8 +4,8 @@ import router from './router';
 import { ThemeProvider } from 'styled-components';
 import theme from './theme';
 import { useEffect, useRef } from 'react';
-import useTokenStore from './store/tokenStore.tsx';
-import useMyFurnitureStore from '@store/furnitureStore.ts';
+import useTokenStore from '@store/useTokenStore.tsx';
+import useMyFurnitureStore from '@store/useMyFurnitureStore.ts';
 
 function App() {
   const { initToken } = useTokenStore();

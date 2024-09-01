@@ -5,7 +5,7 @@ import FurnitureModel from '@components/room/model/FurnitureModel.tsx';
 import { useHelper } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
 import { Texture } from 'three';
-import useMyFurnitureStore from '@store/furnitureStore.ts';
+import useMyFurnitureStore from '@store/useMyFurnitureStore.ts';
 
 interface RoomModelProps {
   editMode: boolean
