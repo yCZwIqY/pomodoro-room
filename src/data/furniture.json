@@ -4,8 +4,8 @@
       "id": "basic_bed",
       "name": "기본 침대",
       "path": "bed/basic_bed.glb",
-      "category": "furniture/bed",
-      "position": [3.8, 0, -3],
+      "category": "bed",
+      "position": [0, 0, 0],
       "rotation": [0, 0, 0],
       "hasTexture": false
     }
@@ -15,8 +15,8 @@
       "id": "basic_chair",
       "name": "기본 의자",
       "path": "chair/basic_chair.glb",
-      "category": "furniture/chair",
-      "position": [-3, 0, -3],
+      "category": "chair",
+      "position": [0, 0, 0],
       "rotation": [0, 180, 0],
       "hasTexture": false
     }
@@ -26,8 +26,8 @@
       "id": "basic_desk",
       "name": "기본 책상",
       "path": "desk/basic_desk.glb",
-      "category": "furniture/desk",
-      "position": [-3, 0, -4],
+      "category": "desk",
+      "position": [0, 0, 0],
       "rotation": [0, 0, 0],
       "hasTexture": false
     }

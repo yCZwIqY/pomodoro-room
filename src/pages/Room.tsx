@@ -7,6 +7,7 @@ import Token from '@components/ui/Token.tsx';
 import IconButton from '@components/common/button/IconButton.tsx';
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
+import MyBagComponent from '@components/room/MyBag.tsx';
 
 const roomBgMove = keyframes`
     0% {
@@ -52,15 +53,19 @@ function CameraController({ editMode }) {
     if (editMode) {
       gsap.to(camera.position, {
         x: () => 0,
-        y: () => 15,
+        y: () => 5,
+        z: () => 15,
         ease: 'power3.inOut',
-        duration: 0.5,
+        duration: 0.8,
         onUpdate: () => camera.lookAt(0, 0, 0)
       });
       gsap.to(camera.position, {
+        x: () => 0,
+        y: () => 15,
         z: () => 0,
-        delay: 0.2,
         ease: 'power3.inOut',
+        delay: 0.8,
+        duration: 1,
         onUpdate: () => camera.lookAt(0, 0, 0)
       });
     } else {
@@ -79,6 +84,7 @@ function CameraController({ editMode }) {
 export default function Room() {
   const [editMode, setEditMode] = useState(false);
   const control = useRef(null);
+
   const onClickEdit = () => {
     setEditMode(true);
     // console.dir(camera)
@@ -91,6 +97,7 @@ export default function Room() {
   return (
     <RoomContainer>
       <Canvas
+          key={'room'}
         camera={{
           zoom: 0.3,
           near: 1,
@@ -126,12 +133,6 @@ export default function Room() {
               onClick={onClickHome}
               size={'40px'}
             />
-            <IconButton
-              url={'/icons/box.svg'}
-              onClick={onClickShop}
-              buttonColor={'yellow'}
-              size={'40px'}
-            />
           </>
         ) : (
           <>
@@ -150,6 +151,7 @@ export default function Room() {
           </>
         )}
       </SideNav>
+      <MyBagComponent editMode={editMode} />
     </RoomContainer>
   );
 }

@@ -22,8 +22,8 @@ export default function RoomModel({ editMode }: RoomModelProps) {
   useHelper(lightRef, THREE.SpotLightHelper);
 
   useEffect(() => {
+    console.log(myFurniture);
     if (myFurniture) {
-      console.log();
       loadTexture(
         `/textures/${myFurniture.wallpaper.path}`,
         `/textures/${myFurniture.tile.path}`
@@ -113,14 +113,7 @@ export default function RoomModel({ editMode }: RoomModelProps) {
       <GhostModel />
       <group ref={furnitureGroupRef}>
         {myFurniture.furniture.map((it) => {
-          return (
-            <FurnitureModel
-              key={it.id}
-              path={it.path}
-              initialPosition={it.position}
-              initialRotation={it.rotation}
-            />
-          );
+          return <FurnitureModel key={it.id} data={it} />;
         })}
       </group>
     </group>

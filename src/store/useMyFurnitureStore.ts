@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import furniture from '@data/furniture.json';
 import texture from '@data/texture.json';
 
-interface FurnitureData {
+export interface FurnitureData {
   id: string;
   path: string;
   name: string;
@@ -11,6 +11,7 @@ interface FurnitureData {
   rotation: [number, number, number];
   texturePath?: string;
   hasTexture: boolean;
+  count: number;
 }
 
 interface Texture {
@@ -40,20 +41,20 @@ const useMyFurnitureStore = create<FurnitureDataStore>((set) => ({
 
       localStorage.removeItem('myFurniture');
       localStorage.setItem('myFurniture', JSON.stringify(newData));
-      return newData;
+      return newData
     }),
   initFurnitureData: () =>
     set(() => {
       const myFurniture = localStorage.getItem('myFurniture');
       if (myFurniture) {
-        return JSON.parse(myFurniture);
+        return  JSON.parse(myFurniture);
       } else {
         const newData = {
           myFurniture: {
             furniture: [
-              furniture.bed['basic_bed'],
-              furniture.chair['basic_chair'],
-              furniture.desk['basic_desk']
+              { ...furniture.bed['basic_bed'], position: [3.8, 0, -3] },
+              { ...furniture.chair['basic_chair'], position: [-3, 0, -3] },
+              { ...furniture.desk['basic_desk'], position: [-3, 0, -4] }
             ],
             wallpaper: texture.wallpaper['basic_wallpaper'],
             tile: texture.tile['basic_tile']
@@ -61,6 +62,7 @@ const useMyFurnitureStore = create<FurnitureDataStore>((set) => ({
         };
 
         localStorage.setItem('myFurniture', JSON.stringify(newData));
+        console.log(newData)
         return newData;
       }
     })
