@@ -41,13 +41,13 @@ const useMyFurnitureStore = create<FurnitureDataStore>((set) => ({
 
       localStorage.removeItem('myFurniture');
       localStorage.setItem('myFurniture', JSON.stringify(newData));
-      return newData
+      return newData;
     }),
   initFurnitureData: () =>
     set(() => {
       const myFurniture = localStorage.getItem('myFurniture');
       if (myFurniture) {
-        return  JSON.parse(myFurniture);
+        return JSON.parse(myFurniture);
       } else {
         const newData = {
           myFurniture: {
@@ -62,7 +62,7 @@ const useMyFurnitureStore = create<FurnitureDataStore>((set) => ({
         };
 
         localStorage.setItem('myFurniture', JSON.stringify(newData));
-        console.log(newData)
+        console.log(newData);
         return newData;
       }
     })

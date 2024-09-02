@@ -97,7 +97,7 @@ export default function Room() {
   return (
     <RoomContainer>
       <Canvas
-          key={'room'}
+        key={'room'}
         camera={{
           zoom: 0.3,
           near: 1,
