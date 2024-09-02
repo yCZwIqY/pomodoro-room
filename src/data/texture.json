@@ -9,7 +9,7 @@
       "id": "basic_wallpaper",
       "name": "기본 벽지",
       "path": "wallpaper/basic_wallpaper.png",
-      "category": "texture/wallpaper",
+      "category": "wallpaper",
       "hasTexture": false
     }
   },
@@ -18,7 +18,7 @@
       "id": "basic_tile",
       "name": "기본 바닥",
       "path": "tile/basic_tile.png",
-      "category": "texture/tile",
+      "category": "tile",
       "hasTexture": false
     }
   }
