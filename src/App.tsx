@@ -16,6 +16,7 @@ function App() {
   const effectRan = useRef(false);
 
   useEffect(() => {
+    window.oncontextmenu = () => false;
     if (!effectRan.current) {
       initToken();
       init();

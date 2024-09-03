@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import useMyBagStore from '@store/useMyBagStore.ts';
 import MyBagItem from '@components/room/MyBagItem.tsx';
+import useEditModeStore from '@store/useEditModeStore.ts';
 
 const MyBagContainer = styled.div`
   position: absolute;
@@ -41,19 +42,19 @@ const CloseButton = styled.button`
   margin-top: -30px;
 `;
 
-export default function MyBag({ editMode }) {
+export default function MyBag() {
+  const { isEditMode } = useEditModeStore();
   const [showCloseBtn, setShowCloseBtn] = useState(false);
   const [isClose, setIsClose] = useState(false);
   const { myBag } = useMyBagStore();
 
   useEffect(() => {
-    console.log(getAllMyBag());
-    if (editMode) {
-      onShow(true);
+    if (isEditMode) {
+      onShow();
     } else {
       onHide();
     }
-  }, [editMode]);
+  }, [isEditMode]);
 
   const getAllMyBag = () => {
     return Object.values(myBag).flat();
@@ -63,20 +64,17 @@ export default function MyBag({ editMode }) {
       transform: 'translateY(100%)',
       duration: 0.5,
       onComplete: () => {
-        if (!editMode) {
+        if (!isEditMode) {
           setShowCloseBtn(false);
         }
       }
     });
   };
 
-  const onShow = (firstShow = false) => {
-    let delay = 0;
-    if (firstShow) delay = 1.5;
+  const onShow = () => {
     gsap.to('.my-bag-container', {
       transform: 'translateY(0)',
       duration: 0.5,
-      delay: delay,
       onComplete: () => setShowCloseBtn(true)
     });
   };

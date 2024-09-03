@@ -6,9 +6,17 @@ import Timer from '@components/ui/timer/Timer.tsx';
 import Token from '@components/ui/Token.tsx';
 import IconButton from '@components/common/button/IconButton.tsx';
 import { useEffect, useRef, useState } from 'react';
-import { gsap } from 'gsap';
 import MyBagComponent from '@components/room/MyBag.tsx';
+import {
+  EffectComposer,
+  Outline,
+  Selection
+} from '@react-three/postprocessing';
+import * as THREE from 'three';
+import { gsap } from 'gsap';
 
+import useEditModeStore from '@store/useEditModeStore.ts';
+import useMyFurnitureStore from '@store/useMyFurnitureStore.ts';
 const roomBgMove = keyframes`
     0% {
         transform: translateX(0%);
@@ -17,6 +25,7 @@ const roomBgMove = keyframes`
         transform: translateX(-50%);
     }
 `;
+
 const RoomContainer = styled.main`
   width: 100vw;
   height: 100vh;
@@ -82,18 +91,40 @@ function CameraController({ editMode }) {
 }
 
 export default function Room() {
-  const [editMode, setEditMode] = useState(false);
+  const { isEditMode, onToggleMode, setReset, tempPosition } =
+    useEditModeStore();
   const control = useRef(null);
-
+  const { myFurniture, updateFurnitureData } = useMyFurnitureStore();
   const onClickEdit = () => {
-    setEditMode(true);
-    // console.dir(camera)
-    // camera.lookAt
+    onToggleMode();
   };
-  const onClickShop = () => {};
+  const onClickShop = () => {
+    if (tempPosition) {
+      Object.keys(tempPosition).map((key) => {
+        console.log(
+          myFurniture.furniture.map((it) => {
+            if (it.id === key) {
+              return { ...it, ...tempPosition[key] };
+            } else return it;
+          }),
+          tempPosition
+        );
+        updateFurnitureData(
+          myFurniture.furniture.map((it) => {
+            if (it.id === key) {
+              return { ...it, ...tempPosition[key] };
+            } else return it;
+          })
+        );
+        console.log(myFurniture.furniture);
+      });
+    }
+  };
   const onClickHome = () => {
-    setEditMode(false);
+    setReset();
+    onToggleMode();
   };
+
   return (
     <RoomContainer>
       <Canvas
@@ -107,26 +138,24 @@ export default function Room() {
         }}
         style={{ background: 'transparent' }}
       >
-        <CameraController editMode={editMode} />
+        <CameraController editMode={isEditMode} />
         <OrbitControls
           ref={control}
           minAzimuthAngle={-Math.PI / 2}
-          maxAzimuthAngle={Math.PI / 2}
-          minPolarAngle={Math.PI / 6}
+          maxAzimuthAngle={isEditMode ? Math.PI : Math.PI / 2}
+          minPolarAngle={isEditMode ? 0 : Math.PI / 6}
           maxPolarAngle={Math.PI / 2}
           minDistance={10}
           maxDistance={35}
-          enabled={!editMode}
+          enabled={!isEditMode}
         />
-        {/*<gridHelper/>*/}
-        {/*<axesHelper/>*/}
         <ambientLight intensity={0.5} />
-        <RoomModel editMode={editMode} />
+        <RoomModel />
       </Canvas>
       <Timer />
       <Token />
       <SideNav>
-        {editMode ? (
+        {isEditMode ? (
           <>
             <IconButton
               url={'/icons/home.svg'}
@@ -150,8 +179,15 @@ export default function Room() {
             />
           </>
         )}
+
+        <IconButton
+          url={'/icons/shop.svg'}
+          onClick={onClickShop}
+          buttonColor={'purple'}
+          size={'40px'}
+        />
       </SideNav>
-      <MyBagComponent editMode={editMode} />
+      <MyBagComponent />
     </RoomContainer>
   );
 }

@@ -1,7 +1,7 @@
 {
   "bed": {
     "basic_bed": {
-      "id": "basic_bed",
+      "key": "basic_bed",
       "name": "기본 침대",
       "path": "bed/basic_bed.glb",
       "category": "bed",
@@ -12,7 +12,7 @@
   },
   "chair": {
     "basic_chair": {
-      "id": "basic_chair",
+      "key": "basic_chair",
       "name": "기본 의자",
       "path": "chair/basic_chair.glb",
       "category": "chair",
@@ -23,7 +23,7 @@
   },
   "desk": {
     "basic_desk": {
-      "id": "basic_desk",
+      "key": "basic_desk",
       "name": "기본 책상",
       "path": "desk/basic_desk.glb",
       "category": "desk",

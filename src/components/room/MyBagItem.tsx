@@ -62,7 +62,7 @@ export default function MyBagItem({ data }: MyBagItemProps) {
         <MyBagItemTextureImg isZero={isZero} src={getPath()} alt={data.name} />
       ) : (
         <Canvas
-          key={`my-bag-${data.id}`}
+          key={`my-bag-${data.key}`}
           camera={{
             zoom: 1.5,
             near: 1,
@@ -86,7 +86,7 @@ export default function MyBagItem({ data }: MyBagItemProps) {
             castShadow={false}
           />
           <FurnitureModel
-            key={`my-bag-${data.id}`}
+            key={`my-bag-${data.key}`}
             data={{ ...data, position: [0, 0, 0], rotation: [0, 0, 0] }}
           />
         </Canvas>

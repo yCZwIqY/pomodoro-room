@@ -3,26 +3,36 @@ import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import FurnitureModel from '@components/room/model/FurnitureModel.tsx';
 import { useHelper } from '@react-three/drei';
-import { useThree } from '@react-three/fiber';
-import { Texture } from 'three';
+import { useFrame, useThree } from '@react-three/fiber';
+import { Texture, Vector3 } from 'three';
 import useMyFurnitureStore from '@store/useMyFurnitureStore.ts';
+import useEditModeStore from '@store/useEditModeStore.ts';
 
 interface RoomModelProps {
-  editMode: boolean;
+  isEditMode: boolean;
 }
-export default function RoomModel({ editMode }: RoomModelProps) {
+
+export default function RoomModel() {
+  const {
+    tempPosition,
+    isEditMode,
+    targetObject,
+    targetObjectId,
+    reset,
+    setTempPosition
+  } = useEditModeStore();
+  const { myFurniture } = useMyFurnitureStore();
   const wallGroupRef = useRef<THREE.Mesh>(null);
   const lightRef = useRef<THREE.SpotLight>(null);
   const furnitureGroupRef = useRef<THREE.Group>(null);
   const { scene } = useThree();
   const [wallPaperTexture, setWallPaperTexture] = useState<Texture>(null);
   const [tileTexture, setTileTexture] = useState<Texture>(null);
-  const { myFurniture } = useMyFurnitureStore();
+  const mouse = useRef(new THREE.Vector2());
 
   useHelper(lightRef, THREE.SpotLightHelper);
 
   useEffect(() => {
-    console.log(myFurniture);
     if (myFurniture) {
       loadTexture(
         `/textures/${myFurniture.wallpaper.path}`,
@@ -36,6 +46,34 @@ export default function RoomModel({ editMode }: RoomModelProps) {
       applyTextureToScene();
     }
   }, [furnitureGroupRef]);
+
+  useEffect(() => {
+    window.addEventListener('mousemove', (e) => {
+      mouse.current.x = e.clientX;
+      mouse.current.y = e.clientY;
+    });
+  }, []);
+
+  useFrame(({ camera, pointer }) => {
+    if (isEditMode && targetObject) {
+      const xPos = pointer.x * 7.5;
+      const zPos = -pointer.y * 7.5;
+
+      if (xPos > 5 || xPos < -5 || zPos > 5 || zPos < -5) {
+        return;
+      }
+
+      targetObject.position.set(xPos, targetObject.position.y, zPos);
+      setTempPosition(targetObjectId, {
+        position: [xPos, targetObject.position.y, zPos],
+        rotation: [
+          THREE.MathUtils.radToDeg(targetObject.rotation.x),
+          THREE.MathUtils.radToDeg(targetObject.rotation.y),
+          THREE.MathUtils.radToDeg(targetObject.rotation.z)
+        ]
+      });
+    }
+  });
 
   const applyTextureToScene = () => {
     scene.traverse((child) => {
@@ -111,11 +149,19 @@ export default function RoomModel({ editMode }: RoomModelProps) {
       )}
       <directionalLight ref={lightRef} intensity={1} position={[0, 10, 0]} />
       <GhostModel />
-      <group ref={furnitureGroupRef}>
-        {myFurniture.furniture.map((it) => {
-          return <FurnitureModel key={it.id} data={it} />;
-        })}
-      </group>
+      {reset > 0 && (
+        <group ref={furnitureGroupRef}>
+          {myFurniture.furniture.map((it) => {
+            return (
+              <FurnitureModel
+                key={`${it.id}-${reset}`}
+                data={it}
+                mousePos={mouse.current}
+              />
+            );
+          })}
+        </group>
+      )}
     </group>
   );
 }
