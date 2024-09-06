@@ -10,20 +10,27 @@ const ButtonGroup = styled.div`
 `;
 
 interface TimerControlsProps {
-    onStop: () => void;
-    onPauseResume: () => void;
-    isPaused: boolean;
+  onStop: () => void;
+  onPauseResume: () => void;
+  isPaused: boolean;
 }
 
-const TimerControls = ({ onStop, onPauseResume, isPaused }:TimerControlsProps) => (
-    <ButtonGroup>
-        <Button onClick={onStop} buttonColor={'red'}>
-            중단
-        </Button>
-        <Button onClick={onPauseResume} buttonColor={isPaused ? 'green' : undefined}>
-            {isPaused ? '재시작' : '일시정지'}
-        </Button>
-    </ButtonGroup>
+const TimerControls = ({
+  onStop,
+  onPauseResume,
+  isPaused
+}: TimerControlsProps) => (
+  <ButtonGroup>
+    <Button onClick={onStop} buttonColor={'red'}>
+      중단
+    </Button>
+    <Button
+      onClick={onPauseResume}
+      buttonColor={isPaused ? 'green' : undefined}
+    >
+      {isPaused ? '재시작' : '일시정지'}
+    </Button>
+  </ButtonGroup>
 );
 
 export default TimerControls;

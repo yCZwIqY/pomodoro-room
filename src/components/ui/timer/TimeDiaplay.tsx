@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const TimeLabel = styled.div`
   width: 100%;
@@ -44,26 +44,33 @@ const TimeTypeLabel = styled.div`
 `;
 
 interface TimerDisplayProps {
-    timeType: 'FOCUS' | 'REST';
-    currentRepeatCount: number;
-    remainingTime: number;
+  timeType: 'FOCUS' | 'REST';
+  currentRepeatCount: number;
+  remainingTime: number;
 }
 
-const TimerDisplay = ({ timeType, currentRepeatCount, remainingTime }: TimerDisplayProps) => {
-    const getMin = () => Math.floor(remainingTime / 60).toString().padStart(2, '0');
-    const getSec = () => (remainingTime % 60).toString().padStart(2, '0');
+const TimerDisplay = ({
+  timeType,
+  currentRepeatCount,
+  remainingTime
+}: TimerDisplayProps) => {
+  const getMin = () =>
+    Math.floor(remainingTime / 60)
+      .toString()
+      .padStart(2, '0');
+  const getSec = () => (remainingTime % 60).toString().padStart(2, '0');
 
-    return (
-        <>
-            <RepeatLabel>{currentRepeatCount + 1} 번째 반복</RepeatLabel>
-            <TimeTypeLabel isFocus={timeType === 'FOCUS'}>
-                {timeType === 'FOCUS' ? '집중' : '휴식'}
-            </TimeTypeLabel>
-            <TimeLabel isFocus={timeType === 'FOCUS'}>
-                {getMin()} : {getSec()}
-            </TimeLabel>
-        </>
-    );
+  return (
+    <>
+      <RepeatLabel>{currentRepeatCount + 1} 번째 반복</RepeatLabel>
+      <TimeTypeLabel isFocus={timeType === 'FOCUS'}>
+        {timeType === 'FOCUS' ? '집중' : '휴식'}
+      </TimeTypeLabel>
+      <TimeLabel isFocus={timeType === 'FOCUS'}>
+        {getMin()} : {getSec()}
+      </TimeLabel>
+    </>
+  );
 };
 
 export default TimerDisplay;

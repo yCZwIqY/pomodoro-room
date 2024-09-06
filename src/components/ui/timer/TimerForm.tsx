@@ -4,9 +4,9 @@ import Button from '@components/common/button/Button.tsx';
 import styled from 'styled-components';
 
 export interface TimerFormData {
-    focusTime: number;
-    restTime: number;
-    repeatCount: number;
+  focusTime: number;
+  restTime: number;
+  repeatCount: number;
 }
 
 const StartButtonContainer = styled.div`

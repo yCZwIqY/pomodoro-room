@@ -1,10 +1,10 @@
-import {useCameraController} from "@hooks/useCameraController.ts";
+import { useCameraController } from '@hooks/useCameraController.ts';
 
 interface CameraControllerProps {
-    editMode: boolean;
+  editMode: boolean;
 }
 
-export const CameraController  = ({ editMode }) => {
-    useCameraController(editMode);
-    return null;
+export const CameraController = ({ editMode }) => {
+  useCameraController(editMode);
+  return null;
 };
