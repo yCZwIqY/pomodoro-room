@@ -10,6 +10,9 @@ import styled, { keyframes } from 'styled-components';
 import { CameraController } from '@components/room/CameraController.tsx';
 import RoomModel from '@components/room/model/RoomModel.tsx';
 import { SideNavigation } from '@components/ui/SideNavigation.tsx';
+import { useNavigate } from 'react-router-dom';
+import FurnitureInfo from '@components/ui/FurnitureInfo.tsx';
+import useMyBagStore from '@store/useMyBagStore.ts';
 
 const roomBgMove = keyframes`
     0% {
@@ -40,36 +43,35 @@ const RoomContainer = styled.main`
 `;
 
 export default function Room() {
-  const { isEditMode, onToggleMode, setReset, tempPosition } =
+  const { isEditMode, onToggleMode, setReset, tempPosition, initTempPosition } =
     useEditModeStore();
   const { myFurniture, updateFurnitureData } = useMyFurnitureStore();
+  const { saveBag, init } = useMyBagStore();
   const control = useRef(null);
+  const navigator = useNavigate();
 
   const onClickEdit = () => {
     onToggleMode();
   };
 
-  const onClickShop = () => {};
+  const onClickShop = () => {
+    navigator('/shop');
+  };
 
   const onClickHome = () => {
-    setReset();
     onToggleMode();
+    onClickCancel();
   };
 
   const onClickCancel = () => {
+    init();
     setReset();
+    initTempPosition(myFurniture.furniture);
   };
 
   const onClickSave = () => {
-    if (tempPosition) {
-      const updatedFurniture = myFurniture.furniture.map((item) => {
-        if (tempPosition[item.id]) {
-          return { ...item, ...tempPosition[item.id] };
-        }
-        return item;
-      });
-      updateFurnitureData(updatedFurniture);
-    }
+    updateFurnitureData(Object.values(tempPosition));
+    saveBag();
   };
 
   return (
@@ -109,6 +111,7 @@ export default function Room() {
         onClickSave={onClickSave}
       />
       <MyBagComponent />
+      <FurnitureInfo />
     </RoomContainer>
   );
 }

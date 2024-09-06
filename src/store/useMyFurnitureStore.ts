@@ -13,6 +13,7 @@ export interface FurnitureData {
   texturePath?: string;
   hasTexture: boolean;
   count: number;
+  deployed: number;
 }
 
 interface Texture {
@@ -79,7 +80,6 @@ const useMyFurnitureStore = create<FurnitureDataStore>((set) => ({
         };
 
         localStorage.setItem('myFurniture', JSON.stringify(newData));
-        console.log(newData);
         return newData;
       }
     })

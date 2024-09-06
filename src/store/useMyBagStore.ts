@@ -1,43 +1,42 @@
-import { FurnitureData } from '@store/useMyFurnitureStore.ts';
 import { create } from 'zustand';
 import furniture from '@data/furniture.json';
 import texture from '@data/texture.json';
 
 const useMyBagStore = create((set) => ({
   myBag: {},
-  pull: (category, id) =>
+  pull: (category, key) =>
     set((state) => {
-      const categoryArr = state[category];
+      const categoryArr = state.myBag[category];
       const newData = {
         ...state,
-        [category]: categoryArr.map((it) => {
-          if (it.id === id) {
-            return { ...it, count: it - 1 };
-          }
-          return it;
-        })
+        myBag: {
+          ...state.myBag,
+          [category]: categoryArr.map((it) => {
+            if (it.key === key) {
+              return { ...it, count: it.count - 1, deployed: it.deployed + 1 };
+            }
+            return it;
+          })
+        }
       };
-
-      localStorage.removeItem('myBag');
-      localStorage.setItem('myBag', JSON.stringify(newData));
 
       return newData;
     }),
-  put: (category, id) =>
+  put: (category, key) =>
     set((state) => {
-      const categoryArr = state[category];
+      const categoryArr = state.myBag[category];
       const newData = {
         ...state,
-        [category]: categoryArr.map((it) => {
-          if (it.id === id) {
-            return { ...it, count: it + 1 };
-          }
-          return it;
-        })
+        myBag: {
+          ...state.myBag,
+          [category]: categoryArr.map((it) => {
+            if (it.key === key) {
+              return { ...it, count: it.count + 1, deployed: it.deployed - 1 };
+            }
+            return it;
+          })
+        }
       };
-
-      localStorage.removeItem('myBag');
-      localStorage.setItem('myBag', JSON.stringify(newData));
 
       return newData;
     }),
@@ -65,9 +64,9 @@ const useMyBagStore = create((set) => ({
         return { myBag: JSON.parse(localStorage.getItem('myBag')) };
       } else {
         const newData = {
-          bed: [{ ...furniture.bed['basic_bed'], count: 0 }],
-          chair: [{ ...furniture.chair['basic_chair'], count: 0 }],
-          desk: [{ ...furniture.desk['basic_desk'], count: 0 }],
+          bed: [{ ...furniture.bed['basic_bed'], count: 0, deployed: 1 }],
+          chair: [{ ...furniture.chair['basic_chair'], count: 0, deployed: 1 }],
+          desk: [{ ...furniture.desk['basic_desk'], count: 0, deployed: 1 }],
           wallpaper: [
             {
               ...texture.wallpaper['basic_wallpaper'],
@@ -85,6 +84,12 @@ const useMyBagStore = create((set) => ({
         localStorage.setItem('myBag', JSON.stringify(newData));
         return { myBag: newData };
       }
+    }),
+  saveBag: () =>
+    set((state) => {
+      localStorage.removeItem('myBag');
+      localStorage.setItem('myBag', JSON.stringify(state.myBag));
+      return state;
     })
 }));
 

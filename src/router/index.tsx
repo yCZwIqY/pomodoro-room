@@ -9,12 +9,15 @@ const Shop = lazy(() => import('../pages/Shop.tsx'));
 const router = createBrowserRouter([
   {
     path: '/',
-    element: (
-      <Suspense fallback={<Loading />}>
-        <Room />
-      </Suspense>
-    ),
     children: [
+      {
+        path: '/room',
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Room />
+          </Suspense>
+        )
+      },
       {
         path: '/home',
         element: <Home />

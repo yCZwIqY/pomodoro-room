@@ -6,8 +6,12 @@ const useEditModeStore = create((set) => ({
     set((state) => ({
       ...state,
       isEditMode: !state.isEditMode,
-      targetObject: null
+      targetObject: null,
+      lastClickedObject: null
     })),
+  lastClickedObject: null,
+  setLastClickedObject: (id) =>
+    set((state) => ({ ...state, lastClickedObject: id })),
   targetObject: null,
   targetObjectId: null,
   setTargetObject: (obj, id) =>
@@ -24,7 +28,27 @@ const useEditModeStore = create((set) => ({
       console.log(pos);
       return {
         ...state,
-        tempPosition: { ...state.tempPosition, [id]: pos }
+        tempPosition: { ...state.tempPosition, [id]: { ...pos, id } }
+      };
+    }),
+  initTempPosition: (furniture) =>
+    set((state) => {
+      const posMap = {};
+      furniture.forEach((it) => {
+        posMap[it.id] = it;
+      });
+
+      return {
+        ...state,
+        tempPosition: posMap
+      };
+    }),
+  removeTempPosition: (id) =>
+    set((state) => {
+      delete state.tempPosition[id];
+      return {
+        ...state,
+        tempPosition: { ...state.tempPosition }
       };
     })
 }));

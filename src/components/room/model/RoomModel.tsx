@@ -14,7 +14,8 @@ export default function RoomModel() {
     targetObject,
     targetObjectId,
     reset,
-    setTempPosition
+    setTempPosition,
+    initTempPosition
   } = useEditModeStore();
   const { myFurniture } = useMyFurnitureStore();
   const { scene } = useThree();
@@ -43,6 +44,12 @@ export default function RoomModel() {
     }
   }, [furnitureGroupRef, scene]);
 
+  useEffect(() => {
+    if (myFurniture.furniture.length > 0) {
+      initTempPosition(myFurniture.furniture);
+    }
+  }, [myFurniture.furniture, isEditMode]);
+
   useFrame(({ pointer }) => {
     if (isEditMode && targetObject) {
       const xPos = pointer.x * 7.5;
@@ -54,6 +61,7 @@ export default function RoomModel() {
 
       targetObject.position.set(xPos, targetObject.position.y, zPos);
       setTempPosition(targetObjectId, {
+        ...tempPosition[targetObjectId],
         position: [xPos, targetObject.position.y, zPos],
         rotation: [
           THREE.MathUtils.radToDeg(targetObject.rotation.x),
@@ -124,13 +132,16 @@ export default function RoomModel() {
       <GhostModel />
       {reset > 0 && (
         <group ref={furnitureGroupRef}>
-          {myFurniture.furniture.map((it) => (
-            <FurnitureModel
-              key={`${it.id}-${reset}`}
-              data={it}
-              mousePos={mouse.current}
-            />
-          ))}
+          {Object.keys(tempPosition).map((it) => {
+            const data = tempPosition[it];
+            return (
+              <FurnitureModel
+                data={data}
+                key={data.id}
+                mousePos={mouse.current}
+              />
+            );
+          })}
         </group>
       )}
     </group>

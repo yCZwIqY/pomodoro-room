@@ -1,5 +1,5 @@
 import './App.css';
-import { RouterProvider } from 'react-router-dom';
+import { RouterProvider, useLocation, useNavigate } from 'react-router-dom';
 import router from './router';
 import { ThemeProvider } from 'styled-components';
 import theme from './theme';
@@ -7,6 +7,20 @@ import { useEffect, useRef } from 'react';
 import useTokenStore from '@store/useTokenStore.tsx';
 import useMyFurnitureStore from '@store/useMyFurnitureStore.ts';
 import useMyBagStore from '@store/useMyBagStore.ts';
+
+const TransitionView = () => {
+  const location = useLocation();
+  const prevLocationRef = useRef(location.pathname);
+
+  useEffect(() => {
+    if (!document.startViewTransition) return;
+    if (prevLocationRef.current !== location.pathname) {
+      document.startViewTransition(() => {
+        prevLocationRef.current = location.pathname;
+      });
+    }
+  }, [location]);
+};
 
 function App() {
   const { initToken } = useTokenStore();
@@ -30,7 +44,9 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <RouterProvider router={router} />
+      <RouterProvider router={router}>
+        <TransitionView />
+      </RouterProvider>
     </ThemeProvider>
   );
 }

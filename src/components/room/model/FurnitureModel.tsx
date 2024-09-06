@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { Outlines, useGLTF } from '@react-three/drei';
 import { FurnitureData } from '@store/useMyFurnitureStore.ts';
@@ -10,18 +10,27 @@ interface FurnitureModelProps {
 
 export default function FurnitureModel({ data }: FurnitureModelProps) {
   const { nodes, materials } = useGLTF(`/models/furniture/${data.path}`);
-
-  const [position, setPosition] = useState(data.position);
   const [rotation, setRotation] = useState(data.rotation);
   const [hovered, setHovered] = useState(false);
   const objectRef = useRef(null);
-  const { isEditMode, targetObject, setTargetObject, setTempPosition } =
-    useEditModeStore();
+  const {
+    isEditMode,
+    targetObject,
+    setTargetObject,
+    setTempPosition,
+    setLastClickedObject,
+    lastClickedObject
+  } = useEditModeStore();
   const convertedRotation = () =>
     rotation.map((it) => THREE.MathUtils.degToRad(it));
-
-  const isSelected = () =>
-    targetObject != null && targetObject === objectRef.current;
+  const isSelected = useMemo(
+    () => targetObject != null && targetObject === objectRef.current,
+    [targetObject, objectRef.current]
+  );
+  const isLastSelected = useMemo(
+    () => lastClickedObject?.id === data.id,
+    [lastClickedObject]
+  );
 
   return (
     <>
@@ -31,11 +40,13 @@ export default function FurnitureModel({ data }: FurnitureModelProps) {
         key={data.id ?? data.key}
         rotation={convertedRotation()}
         onPointerDown={(e) => {
+          if (!isEditMode) return;
+          setLastClickedObject(data);
           if (e.button == 2) {
-            const deg = rotation[1] + 90;
+            const deg = (rotation[1] + 90) % 360;
             setRotation([0, deg, 0]);
             setTempPosition(data.id, {
-              position: objectRef.current.position,
+              ...data,
               rotation: [0, deg, 0]
             });
             return;
@@ -46,7 +57,8 @@ export default function FurnitureModel({ data }: FurnitureModelProps) {
         }}
         onPointerUp={() => {
           if (isEditMode) {
-            if (isSelected()) {
+            if (isSelected) {
+              setLastClickedObject(data);
               setTargetObject(null, null);
             }
           }
@@ -62,12 +74,14 @@ export default function FurnitureModel({ data }: FurnitureModelProps) {
           {...nodes}
           material={materials['Material']}
         >
-          {(isSelected() || (isEditMode && hovered)) && (
-            <Outlines
-              thickness={1.5}
-              color={isSelected() ? 'red' : '#228AED'}
-            />
+          {(isSelected || isLastSelected || (isEditMode && hovered)) && (
+            <Outlines thickness={2} color={isSelected ? 'red' : '#228AED'} />
           )}
+          <meshToonMaterial
+            map={materials['Material'].map}
+            gradientMap={null}
+            color={materials['Material'].color}
+          />
         </mesh>
       </group>
     </>

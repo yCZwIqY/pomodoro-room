@@ -7,7 +7,8 @@
       "category": "bed",
       "position": [0, 0, 0],
       "rotation": [0, 0, 0],
-      "hasTexture": false
+      "hasTexture": false,
+      "price": 10
     }
   },
   "chair": {
@@ -18,7 +19,8 @@
       "category": "chair",
       "position": [0, 0, 0],
       "rotation": [0, 180, 0],
-      "hasTexture": false
+      "hasTexture": false,
+      "price": 10
     }
   },
   "desk": {
@@ -29,7 +31,18 @@
       "category": "desk",
       "position": [0, 0, 0],
       "rotation": [0, 0, 0],
-      "hasTexture": false
+      "hasTexture": false,
+      "price": 10
+    },
+    "l_shaped_desk": {
+      "key": "l_shaped_desk",
+      "name": "L자 책상",
+      "path": "desk/l_shaped_desk.glb",
+      "category": "desk",
+      "position": [0, 0, 0],
+      "rotation": [0, 0, 0],
+      "hasTexture": false,
+      "price": 15
     }
   }
 }

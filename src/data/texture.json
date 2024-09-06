@@ -10,7 +10,8 @@
       "name": "기본 벽지",
       "path": "wallpaper/basic_wallpaper.png",
       "category": "wallpaper",
-      "hasTexture": false
+      "hasTexture": false,
+      "price": 5
     }
   },
   "tile": {
@@ -19,7 +20,8 @@
       "name": "기본 바닥",
       "path": "tile/basic_tile.png",
       "category": "tile",
-      "hasTexture": false
+      "hasTexture": false,
+      "price": 5
     }
   }
 }

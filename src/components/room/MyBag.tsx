@@ -80,7 +80,6 @@ export default function MyBag() {
   };
 
   const onClose = () => {
-    console.log(isClose);
     if (isClose) {
       onShow();
     } else {
