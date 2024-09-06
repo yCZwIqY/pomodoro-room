@@ -40,8 +40,8 @@ export const IconButtonContainer = styled.button`
   }
 
   @media ${({ theme }) => theme.device.tablet} {
-    width: 25px;
-    height: 25px;
+    width: 35px;
+    height: 35px;
   }
 `;
 

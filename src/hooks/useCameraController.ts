@@ -20,7 +20,7 @@ export const useCameraController = (editMode: boolean) => {
                 y: 15,
                 z: 0,
                 ease: 'power3.inOut',
-                delay: 0.8,
+                delay: 1.2,
                 duration: 1,
                 onUpdate: () => camera.lookAt(0, 0, 0)
             });

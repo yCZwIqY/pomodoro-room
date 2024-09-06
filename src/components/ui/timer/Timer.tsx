@@ -6,6 +6,7 @@ import useTimer from "@hooks/useTimer.ts";
 import styled from "styled-components";
 import TimerControls from "@components/ui/timer/TimerControls.tsx";
 import TimerDisplay from "@components/ui/timer/TimeDiaplay.tsx";
+import useEditModeStore from "@store/useEditModeStore.ts";
 
 const TimerContainer = styled.details`
     position: absolute;
@@ -14,8 +15,8 @@ const TimerContainer = styled.details`
     background: white;
     padding: 20px;
     border-radius: 21px;
-    box-shadow: 0px 4px 1px ${(props) => props.theme.colors.shadow};
-    display: flex;
+    box-shadow: 0 4px 1px ${({theme}) => theme.colors.shadow};
+    display: ${({display}) => display ? 'none': 'flex'};
     flex-direction: column;
     align-items: center;
     max-width: 45dvw;
@@ -56,8 +57,10 @@ const TimerHeading = styled.summary`
 `;
 
 export default function Timer() {
+    const {isEditMode} = useEditModeStore();
     const {addToken} = useTokenStore();
     const dialogRef = useRef<HTMLDialogElement>(null);
+
 
     const onCompleteRoutine = useCallback((token: number) => {
         addToken(token);
@@ -80,7 +83,7 @@ export default function Timer() {
     };
 
     return (
-        <TimerContainer>
+        <TimerContainer display={isEditMode}>
             {timeType === 'NONE' ? (
                 <TimerForm onSubmit={onStartTimer}/>
             ) : (

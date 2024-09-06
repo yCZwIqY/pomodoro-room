@@ -1,41 +1,87 @@
-import { useGLTF } from '@react-three/drei';
-import { useEffect, useRef, useState } from 'react';
-import { useFrame } from '@react-three/fiber';
+import {useGLTF} from '@react-three/drei';
+import {useEffect, useRef, useState} from 'react';
+import {useFrame} from '@react-three/fiber';
 import * as THREE from 'three';
+import {gsap} from "gsap";
+import useEditModeStore from "@store/useEditModeStore.ts";
 
 export default function GhostModel() {
-  const ghostRef = useRef<THREE.Mesh>(null);
-  const { scene } = useGLTF('/models/ghost/ghost.glb');
-  const [position, setPosition] = useState([0, 1.7, 0]);
+    const ghostRef = useRef<THREE.Mesh>(null);
+    const {scene} = useGLTF('/models/ghost/ghost.glb');
+    const [position, setPosition] = useState([0, 1.5, 0]);
+    const {isEditMode} = useEditModeStore();
+    const opacity = useRef(0.9);
 
-  useEffect(() => {
-    // scene 내의 모든 메쉬를 탐색하여 Toon 셰이더를 적용
-    scene.traverse((child) => {
-      if (child.isMesh) {
-        // 반투명 Toon 셰이더로 메터리얼 설정
-        child.material = new THREE.MeshToonMaterial({
-          color: child.material.color, // 업로드된 사용자 텍스처를 Toon 셰이더에 적용
-          gradientMap: null, // 기본 Toon 색상 맵 사용
-          transparent: true, // 반투명 효과를 위해 transparent를 true로 설정
-          opacity: 0.9 // 투명도 설정 (0: 완전히 투명, 1: 완전히 불투명)
+    useEffect(() => {
+        scene.traverse((child) => {
+            if (child.isMesh) {
+                child.material = new THREE.MeshToonMaterial({
+                    color: child.material.color,
+                    gradientMap: null,
+                    transparent: true,
+                    opacity: opacity.current
+                });
+            }
         });
-      }
+    }, [scene]);
+
+    useFrame(({clock}) => {
+        if (!isEditMode) {
+            opacity.current = 0.9;
+            const time = clock.getElapsedTime();
+            if (ghostRef.current) {
+                ghostRef.current.position.y = 1.7 + Math.sin(time) * 0.3;
+            }
+        }
+        else {
+            opacity.current--;
+        }
     });
-  }, [scene]);
 
-  useFrame(({ clock }) => {
-    // 시계의 현재 시간에 따라 y 좌표를 변경하여 떠다니는 효과 적용
-    const time = clock.getElapsedTime();
-    if (ghostRef.current) {
-      ghostRef.current.position.y = Math.sin(time) * 0.3; // y 좌표를 주기적으로 변경
-    }
-  });
+    useEffect(() => {
+        if (isEditMode) {
+            gsap.to(ghostRef.current.position, {
+                y: 10,
+                duration: 1,
+                delay: 0.8,
+                ease: 'power1.out'
+            })
 
-  return (
-    <group position={position}>
-      <primitive ref={ghostRef} object={scene}>
-        <meshToonMaterial />
-      </primitive>
-    </group>
-  );
+            scene.traverse((child) => {
+                if (child.isMesh) {
+                    gsap.to(child.material, {
+                        duration: 0.5,
+                        opacity: 0,
+                        delay: 0.8
+                    })
+                }
+            });
+
+        } else {
+            gsap.to(ghostRef.current.position, {
+                y: 1.5,
+                duration: 1.2,
+                delay: 0.8,
+            })
+
+            scene.traverse((child) => {
+                if (child.isMesh) {
+                    gsap.to(child.material, {
+                        duration: 0.5,
+                        opacity: 0.9,
+                        delay: 0.5
+                    })
+                }
+            });
+
+        }
+    }, [isEditMode]);
+
+    return (
+        <group position={position} ref={ghostRef}>
+            <primitive object={scene}>
+                <meshToonMaterial/>
+            </primitive>
+        </group>
+    );
 }
