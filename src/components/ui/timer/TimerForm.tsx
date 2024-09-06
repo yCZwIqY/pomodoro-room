@@ -2,7 +2,12 @@ import { Controller, useForm } from 'react-hook-form';
 import TimeInput from '@components/ui/timer/TimeInput.tsx';
 import Button from '@components/common/button/Button.tsx';
 import styled from 'styled-components';
-import { TimerFormData } from '@components/ui/timer/Timer.tsx';
+
+export interface TimerFormData {
+    focusTime: number;
+    restTime: number;
+    repeatCount: number;
+}
 
 const StartButtonContainer = styled.div`
   padding: 0 20%;

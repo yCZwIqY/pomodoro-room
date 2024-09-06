@@ -13,6 +13,7 @@ export default defineConfig({
           {find: '@styles', replacement: '/src/styles'},
           {find: '@data', replacement: '/src/data'},
           {find: '@store', replacement: '/src/store'},
+          {find: '@hooks', replacement: '/src/hooks'},
       ]
     }
 })
