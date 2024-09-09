@@ -25,7 +25,6 @@ const useEditModeStore = create((set) => ({
   tempPosition: {},
   setTempPosition: (id, pos) =>
     set((state) => {
-      console.log(pos);
       return {
         ...state,
         tempPosition: { ...state.tempPosition, [id]: { ...pos, id } }

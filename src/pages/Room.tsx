@@ -43,7 +43,7 @@ const RoomContainer = styled.main`
 `;
 
 export default function Room() {
-  const { isEditMode, onToggleMode, setReset, tempPosition, initTempPosition } =
+  const { isEditMode, targetObject, onToggleMode, setReset, tempPosition, initTempPosition } =
     useEditModeStore();
   const { myFurniture, updateFurnitureData } = useMyFurnitureStore();
   const { saveBag, init } = useMyBagStore();
@@ -86,16 +86,16 @@ export default function Room() {
         }}
         style={{ background: 'transparent' }}
       >
-        <CameraController editMode={isEditMode} />
+        {/*<CameraController editMode={isEditMode} />*/}
         <OrbitControls
           ref={control}
-          minAzimuthAngle={-Math.PI / 2}
-          maxAzimuthAngle={isEditMode ? Math.PI : Math.PI / 2}
+          minAzimuthAngle={isEditMode ? -Infinity :-Math.PI / 2}
+          maxAzimuthAngle={isEditMode ?Infinity : Math.PI / 2}
           minPolarAngle={isEditMode ? 0 : Math.PI / 6}
           maxPolarAngle={Math.PI / 2}
           minDistance={10}
           maxDistance={35}
-          enabled={!isEditMode}
+          enabled={!targetObject}
         />
         <ambientLight intensity={0.5} />
         <RoomModel />

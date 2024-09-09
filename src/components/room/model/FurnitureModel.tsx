@@ -40,6 +40,7 @@ export default function FurnitureModel({ data }: FurnitureModelProps) {
         key={data.id ?? data.key}
         rotation={convertedRotation()}
         onPointerDown={(e) => {
+          e.stopPropagation();
           if (!isEditMode) return;
           setLastClickedObject(data);
           if (e.button == 2) {
@@ -55,7 +56,8 @@ export default function FurnitureModel({ data }: FurnitureModelProps) {
             setTargetObject(objectRef.current, data.id);
           }
         }}
-        onPointerUp={() => {
+        onPointerUp={(e) => {
+          e.stopPropagation();
           if (isEditMode) {
             if (isSelected) {
               setLastClickedObject(data);
@@ -63,13 +65,20 @@ export default function FurnitureModel({ data }: FurnitureModelProps) {
             }
           }
         }}
+        onPointerOver={(e) => {
+          e.stopPropagation();
+          setHovered(true);
+        }}
+        onPointerLeave={(e) => {
+          e.stopPropagation();
+          setHovered(false);
+
+        }}
       >
         <mesh
           castShadow={true}
           receiveShadow={true}
           geometry={nodes[data.key].geometry}
-          onPointerOver={() => setHovered(true)}
-          onPointerLeave={() => setHovered(false)}
           scale={nodes[data.key].scale}
           {...nodes}
           material={materials['Material']}
