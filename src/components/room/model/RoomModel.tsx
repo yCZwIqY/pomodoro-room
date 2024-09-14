@@ -140,10 +140,11 @@ export default function RoomModel() {
             <GhostModel/>
             {reset > 0 && (
                 <group ref={furnitureGroupRef}>
-                    {Object.keys(tempPosition).map((it) => {
+                    {Object.keys(tempPosition).map((it, idx) => {
                         const data = tempPosition[it];
                         return (
                             <FurnitureModel
+                                sequenceNo={idx}
                                 data={data}
                                 key={data.id}
                                 mousePos={mouse.current}

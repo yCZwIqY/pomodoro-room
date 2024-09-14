@@ -1,18 +1,22 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import * as THREE from 'three';
 import { Outlines, useGLTF } from '@react-three/drei';
 import { FurnitureData } from '@store/useMyFurnitureStore.ts';
 import useEditModeStore from '@store/useEditModeStore.ts';
+import {gsap} from "gsap";
+import {Vector3} from "three";
 
 interface FurnitureModelProps {
+  sequenceNo: number;
   data: FurnitureData;
 }
 
-export default function FurnitureModel({ data }: FurnitureModelProps) {
+export default function FurnitureModel({ data, sequenceNo}: FurnitureModelProps) {
   const { nodes, materials } = useGLTF(`/models/furniture/${data.path}`);
   const [rotation, setRotation] = useState(data.rotation);
   const [hovered, setHovered] = useState(false);
   const objectRef = useRef(null);
+  const [isMovable, setIsMovable] = useState(false);
   const {
     isEditMode,
     targetObject,
@@ -21,8 +25,33 @@ export default function FurnitureModel({ data }: FurnitureModelProps) {
     setLastClickedObject,
     lastClickedObject
   } = useEditModeStore();
+  const canEdit = useMemo(() => isEditMode && isMovable, [isMovable, isEditMode]);
+
+  useEffect(() => {
+    objectRef.current.scale.set(0, 0,0);
+    objectRef.current.position.setY(7);
+
+    gsap.to(objectRef.current.scale, {
+      x:1,
+      y:1,
+      z:1,
+      duration: 1,
+      delay:  1 * (sequenceNo * 0.1),
+      ease: 'elastic.out(1,1.2)',
+    });
+
+
+    gsap.to(objectRef.current.position, {
+      y: 0,
+      duration: 1,
+      delay: 1 * (sequenceNo * 0.2),
+      ease: 'power3.in',
+      onComplete: () => setIsMovable(true)
+    });
+  }, []);
   const convertedRotation = () =>
     rotation.map((it) => THREE.MathUtils.degToRad(it));
+
   const isSelected = useMemo(
     () => targetObject != null && targetObject === objectRef.current,
     [targetObject, objectRef.current]
@@ -41,7 +70,7 @@ export default function FurnitureModel({ data }: FurnitureModelProps) {
         rotation={convertedRotation()}
         onPointerDown={(e) => {
           e.stopPropagation();
-          if (!isEditMode) return;
+          if (!canEdit) return;
           setLastClickedObject(data);
           if (e.button == 2) {
             const deg = (rotation[1] + 90) % 360;
@@ -52,13 +81,13 @@ export default function FurnitureModel({ data }: FurnitureModelProps) {
             });
             return;
           }
-          if (isEditMode) {
+          if (canEdit) {
             setTargetObject(objectRef.current, data.id);
           }
         }}
         onPointerUp={(e) => {
           e.stopPropagation();
-          if (isEditMode) {
+          if (canEdit) {
             if (isSelected) {
               setLastClickedObject(data);
               setTargetObject(null, null);
@@ -83,7 +112,7 @@ export default function FurnitureModel({ data }: FurnitureModelProps) {
           {...nodes}
           material={materials['Material']}
         >
-          {(isSelected || isLastSelected || (isEditMode && hovered)) && (
+          {(isSelected || isLastSelected || (canEdit && hovered)) && (
             <Outlines thickness={2} color={isSelected ? 'red' : '#228AED'} />
           )}
           <meshToonMaterial
