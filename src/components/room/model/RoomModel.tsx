@@ -18,6 +18,7 @@ export default function RoomModel() {
         initTempPosition
     } = useEditModeStore();
     const {myFurniture} = useMyFurnitureStore();
+    const  floorRef = useRef(null);
     const {scene, raycaster, camera, pointer} = useThree();
     const {wallPaperTexture, tileTexture} = useTextures(
         myFurniture.wallpaper.path,
@@ -27,16 +28,6 @@ export default function RoomModel() {
     const wallGroupRef = useRef<THREE.Group>(null);
     const lightRef = useRef<THREE.SpotLight>(null);
     const furnitureGroupRef = useRef<THREE.Group>(null);
-    const mouse = useRef(new THREE.Vector2());
-
-    useEffect(() => {
-        const handleMouseMove = (e: MouseEvent) => {
-            mouse.current.x = e.clientX;
-            mouse.current.y = e.clientY;
-        };
-        window.addEventListener('mousemove', handleMouseMove);
-        return () => window.removeEventListener('mousemove', handleMouseMove);
-    }, []);
 
     useEffect(() => {
         if (furnitureGroupRef.current) {
@@ -54,14 +45,29 @@ export default function RoomModel() {
         if (isEditMode && targetObject) {
 
             raycaster.setFromCamera(pointer, camera);
-            const intersect = raycaster.intersectObject(targetObject, true);
-            const {x, z} = intersect[0].point
+            const intersectFloor = raycaster.intersectObject(floorRef.current, true);
+            const intersectWall = raycaster.intersectObject(wallGroupRef.current, true);
 
-            const onlyX = Math.floor(camera.position.x) <= 4 && Math.floor(camera.position.y) <= 1;
-            const onlyZ = Math.floor(camera.position.z) <= 1 && Math.floor(camera.position.y) <= 1;
+            let xPos = targetObject.position.x;
+            let zPos = targetObject.position.z;
 
-            const xPos = onlyZ ? targetObject.position.x : x;
-            const zPos = onlyX ? targetObject.position.z : z;
+
+            const cameraZPos=Math.floor(Math.abs(camera.position.z));
+            const cameraXPos=Math.floor(Math.abs(camera.position.x));
+            if (intersectFloor.length <= 0 && intersectWall.length > 0) {
+                const yDeg = Math.abs(THREE.MathUtils.radToDeg(intersectWall[0].object.rotation.y));
+                if (yDeg % 180 === 0 &&
+                    (cameraZPos >= 17 && cameraZPos<= 19)) {
+                    xPos = intersectWall[0].point.x;
+                } else if (yDeg % 180 === 90 &&
+                    (cameraXPos >= 17 && cameraXPos <= 19)) {
+                    zPos = intersectWall[0].point.z;
+                }
+            } else {
+                const {x, z} = intersectFloor[0].point
+                xPos = x;
+                zPos = z
+            }
 
             if (xPos > 5 || xPos < -5 || zPos > 5 || zPos < -5) {
                 return;
@@ -128,11 +134,12 @@ export default function RoomModel() {
             )}
             {tileTexture && (
                 <mesh
-                    position={[0, 0, 0]}
-                    scale={[10, 10, 10]}
+                    ref={floorRef}
+                    position={[0, -0.05, 0]}
+                    scale={[10, 10, 0.1]}
                     rotation={[THREE.MathUtils.degToRad(-90), 0, 0]}
                 >
-                    <planeGeometry/>
+                    <boxGeometry/>
                     <meshToonMaterial map={tileTexture}/>
                 </mesh>
             )}
@@ -147,7 +154,6 @@ export default function RoomModel() {
                                 sequenceNo={idx}
                                 data={data}
                                 key={data.id}
-                                mousePos={mouse.current}
                             />
                         );
                     })}

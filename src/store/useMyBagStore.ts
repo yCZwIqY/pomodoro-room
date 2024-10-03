@@ -42,11 +42,11 @@ const useMyBagStore = create((set) => ({
     }),
   buy: (data) =>
     set((state) => {
-      const newData = { ...state };
-      if (state[data.category].find((it) => it.id === data.id)) {
-        newData[data.category] = state[data.category].map((it) => {
-          if (it.id === data.id) {
-            return { ...it, count: it + 1 };
+      const newData = { ...state.myBag };
+      if (state.myBag[data.category].find((it) => it.key === data.key)) {
+        newData[data.category] = state.myBag[data.category].map((it) => {
+          if (it.key === data.key) {
+            return { ...it, count: it.count + 1 };
           }
           return it;
         });
@@ -56,7 +56,7 @@ const useMyBagStore = create((set) => ({
 
       localStorage.removeItem('myBag');
       localStorage.setItem('myBag', JSON.stringify(newData));
-      return newData;
+      return {...state, myBag: newData};
     }),
   init: () =>
     set(() => {

@@ -6,14 +6,23 @@ export const ButtonContainer = styled.button`
     `${theme.buttonColors[$buttonColor].bg}`};
   box-shadow: ${({ theme, $buttonColor }) =>
     `0 5px 1px ${theme.buttonColors[$buttonColor].shadow}`};
-  font-size: ${({ theme }) => theme.fontSize.lg};
+  font-size: ${({ theme, $size}) => theme.fontSize[$size]};
   width: ${({ $fullWidth }) => $fullWidth && '100%'};
   border: 3px solid white;
   outline: none;
   display: inline-block;
   color: white;
   border-radius: 18px;
-  padding: 10px 15px;
+  padding: ${({ $size}) => {
+      switch ($size) {
+          case 'sm':
+              return '8px 10px';
+          case 'lg':
+              return '13px 18px';
+          default:
+              return '10px 15px';
+      }
+  }};
 
   &:active {
     background-color: ${({ theme, $buttonColor }) =>
@@ -53,6 +62,7 @@ interface ButtonProps {
   buttonColor?: ButtonColor;
   fullWidth?: boolean;
   onClick?: MouseEventHandler;
+  size?: 'sm' | 'md' | 'lg'
 }
 
 type ButtonColor = 'red' | 'green' | 'purple' | 'yellow' | 'blue' | 'pink';
@@ -62,13 +72,15 @@ export default function Button({
   disabled = false,
   buttonColor = 'blue',
   fullWidth = false,
-  onClick
+  onClick,
+  size = 'md'
 }: ButtonProps) {
   return (
     <ButtonContainer
       $buttonColor={buttonColor}
       disabled={disabled}
       $fullWidth={fullWidth}
+      $size={size}
       onClick={onClick}
     >
       {children}

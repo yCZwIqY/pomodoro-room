@@ -13,6 +13,7 @@ export interface FurnitureData {
   texturePath?: string;
   hasTexture: boolean;
   count: number;
+  price?: number;
   deployed: number;
 }
 

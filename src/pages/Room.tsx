@@ -55,7 +55,7 @@ export default function Room() {
   };
 
   const onClickShop = () => {
-    navigator('/shop');
+    navigator('/shop/all');
   };
 
   const onClickHome = () => {

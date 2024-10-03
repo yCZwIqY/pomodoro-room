@@ -6,7 +6,7 @@
   },
   "wallpaper": {
     "basic_wallpaper": {
-      "id": "basic_wallpaper",
+      "key": "basic_wallpaper",
       "name": "기본 벽지",
       "path": "wallpaper/basic_wallpaper.png",
       "category": "wallpaper",
@@ -16,7 +16,7 @@
   },
   "tile": {
     "basic_tile": {
-      "id": "basic_tile",
+      "key": "basic_tile",
       "name": "기본 바닥",
       "path": "tile/basic_tile.png",
       "category": "tile",
