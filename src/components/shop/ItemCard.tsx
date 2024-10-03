@@ -5,6 +5,7 @@ import styled from "styled-components";
 import Button from "@components/common/button/Button.tsx";
 import useMyBagStore from "@store/useMyBagStore.ts";
 import useTokenStore from "@store/useTokenStore.tsx";
+import {useEffect, useState} from "react";
 
 const ItemCardContainer = styled.li`
     display: flex;
@@ -20,11 +21,30 @@ interface ItemCardProps {
 }
 
 export default function ItemCard({item}: ItemCardProps) {
-    const {buy} = useMyBagStore();
+    const {buy, myBag} = useMyBagStore();
     const {token, useToken} = useTokenStore();
+    const [text, setText] = useState(" 구매하기");
+
+    useEffect(() => {
+        if (['tile', 'wallpaper'].includes(item.category)
+            && myBag[item.category].find(it => it.key === item.key)) {
+            setText("보유중");
+
+        } else if (item.price > token) {
+            setText("토큰 부족");
+        }
+
+    }, []);
+    const isDisabled = () => {
+        return item.price > token
+            || (
+                ['tile', 'wallpaper'].includes(item.category)
+                && myBag[item.category].find(it => it.key === item.key)
+            )
+    }
 
     const onBuyButtonClick = () => {
-        if(token < item.price) {
+        if (token < item.price) {
             alert('토큰 부족');
             return;
         }
@@ -34,8 +54,8 @@ export default function ItemCard({item}: ItemCardProps) {
     return <ItemCardContainer>
         {['wallpaper', 'tile'].includes(item.category)
             ? <img src={`/textures/${item.path}`}
-            width={'130px'}
-            height={'130px'}/>
+                   width={'130px'}
+                   height={'130px'}/>
             : <Canvas key={`shop-${item.key}`}
                       orthographic
                       camera={{
@@ -69,8 +89,9 @@ export default function ItemCard({item}: ItemCardProps) {
             {item.price} 토큰
         </div>
         <Button fullWidth={true}
+                disabled={isDisabled()}
                 onClick={onBuyButtonClick} size={'sm'}>
-            구매
+            {text}
         </Button>
     </ItemCardContainer>
 }
