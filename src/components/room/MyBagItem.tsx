@@ -63,10 +63,14 @@ export default function MyBagItem({ data }: MyBagItemProps) {
   const onClick = () => {
     if (data.count <= 0) return;
     const id = `${data.key}-${data.deployed}`;
+
+    if(data.hasTexture) {
+      data.currentTexture = data.textures[0]
+    }
     setTempPosition(id, {
       ...data,
       position: [0, 0, 0],
-      rotation: [0, 0, 0]
+      rotation: [0, 0, 0],
     });
     pull(data.category, data.key);
   };

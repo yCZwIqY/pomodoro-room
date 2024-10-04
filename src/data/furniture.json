@@ -7,7 +7,8 @@
       "category": "bed",
       "position": [0, 0, 0],
       "rotation": [0, 0, 0],
-      "hasTexture": false,
+      "hasTexture": true,
+      "textures": ["blue", "pink"],
       "price": 10
     }
   },

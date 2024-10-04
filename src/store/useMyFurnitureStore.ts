@@ -12,9 +12,11 @@ export interface FurnitureData {
   rotation: [number, number, number];
   texturePath?: string;
   hasTexture: boolean;
+  textures: string[];
   count: number;
   price?: number;
   deployed: number;
+  currentTexture?: string;
 }
 
 interface Texture {
@@ -62,7 +64,8 @@ const useMyFurnitureStore = create<FurnitureDataStore>((set) => ({
               {
                 ...furniture.bed['basic_bed'],
                 position: [3.8, 0, -3],
-                id: 'basic_bed-0'
+                id: 'basic_bed-0',
+                currentTexture: furniture.bed['basic_bed'].textures[0]
               },
               {
                 ...furniture.chair['basic_chair'],

@@ -9,8 +9,23 @@ const FurnitureInfoContainer = styled(DetailContainer)`
   min-width: 150px;
   text-align: right;
   padding: 8px 15px;
-  height: ${({ isOpen }) => (isOpen ? '100px' : '20px')};
+  min-height: ${({ isOpen }) => (isOpen ? '100px' : '20px')};
 `;
+
+const ColorList = styled.ul`
+  list-style: none;
+  display: flex;
+  gap: 10px;
+  margin: 5px 0;
+`
+const ColorItem = styled.button`
+  width: 25px;
+  height: 25px;
+  border-radius: 100%;
+  border: 2px solid white;
+  box-shadow: 1px 1px 2px 2px rgba(0,0,0,0.2);
+  background-color:${({$color}) => $color};
+`
 
 const FurnitureInfoSummary = styled(SummaryContainer)``;
 export default function FurnitureInfo() {
@@ -18,7 +33,9 @@ export default function FurnitureInfo() {
     isEditMode,
     lastClickedObject,
     removeTempPosition,
-    setLastClickedObject
+    setLastClickedObject,
+    tempPosition,
+      setTempPosition
   } = useEditModeStore();
   const { put } = useMyBagStore();
   const [isOpen, onToggle] = useDetailSummary();
@@ -30,6 +47,13 @@ export default function FurnitureInfo() {
     setLastClickedObject(null);
   };
 
+  const onColorClick = (color) => {
+    setTempPosition(lastClickedObject.id, {
+      ...tempPosition[lastClickedObject.id],
+      currentTexture: color
+    })
+  }
+
   return (
     <>
       {isEditMode && (
@@ -40,7 +64,21 @@ export default function FurnitureInfo() {
                 <FurnitureInfoSummary>
                   {lastClickedObject.name}
                 </FurnitureInfoSummary>
-                <Button onClick={onPull} buttonColor={'red'}>
+                {lastClickedObject.hasTexture
+                    && <ColorList>
+                      {
+                        lastClickedObject.textures.map(it =>
+                           <li key={`${lastClickedObject.id}-${it}`}>
+                             <ColorItem $color={it}
+                                        onClick={() => onColorClick(it)}
+                             />
+                           </li>)
+                      }
+                    </ColorList>}
+                <Button onClick={onPull}
+                        fullWidth
+                        size={'sm'}
+                        buttonColor={'red'}>
                   넣기
                 </Button>
               </>
