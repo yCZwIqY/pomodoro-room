@@ -15,5 +15,5 @@ export default defineConfig({
           {find: '@store', replacement: '/src/store'},
           {find: '@hooks', replacement: '/src/hooks'},
       ]
-    },
+    }
 })
