@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { useEffect, useRef, useState } from 'react';
-import { gsap } from 'gsap';
+import {useEffect, useState} from 'react';
+import {gsap} from 'gsap';
 import useMyBagStore from '@store/useMyBagStore.ts';
 import MyBagItem from '@components/room/MyBagItem.tsx';
 import useEditModeStore from '@store/useEditModeStore.ts';
@@ -12,7 +12,7 @@ const MyBagContainer = styled.div`
   bottom: 0;
   height: 30dvh;
   perspective: 100px;
-  transform: translateY(100%);
+  transform: translateY(150%);
 `;
 
 const MyBagList = styled.ul`
