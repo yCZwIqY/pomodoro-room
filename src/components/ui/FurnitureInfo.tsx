@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import {DetailContainer, SummaryContainer} from '@components/style.ts';
 import Button from '@components/common/button/Button.tsx';
 import useMyBagStore from '@store/useMyBagStore.ts';
-import {useState} from "react";
+import {SyntheticEvent, useState} from "react";
+import {useDetailSummary} from "@hooks/useDetailSummary.ts";
 
 const FurnitureInfoContainer = styled(DetailContainer)<{
     $isOpen: boolean;
@@ -11,8 +12,13 @@ const FurnitureInfoContainer = styled(DetailContainer)<{
     min-width: 150px;
     text-align: right;
     padding: 8px 15px;
-    min-height: ${({isOpen}) => (isOpen ? '100px' : '20px')};
+    min-height: ${({$isOpen}) => ($isOpen ? '100px' : '20px')};
+
 `;
+
+const ColorList = styled.div`
+
+`
 
 
 const FurnitureInfoSummary = styled(SummaryContainer)``;
@@ -26,7 +32,7 @@ export default function FurnitureInfo() {
         setTempPosition
     } = useEditModeStore();
     const {put} = useMyBagStore();
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, onToggle] = useDetailSummary();
 
 
     const onPull = () => {
@@ -47,20 +53,22 @@ export default function FurnitureInfo() {
         <>
             {isEditMode && (
                 <>
-                    <FurnitureInfoContainer isOpen={isOpen} onToggle={(e:ToggleEvent) => setIsOpen(e.target.open)}>
+                    <FurnitureInfoContainer $isOpen={isOpen} onToggle={onToggle}>
                         {lastClickedObject ? (
                             <>
                                 <FurnitureInfoSummary>
                                     {lastClickedObject.name}
                                 </FurnitureInfoSummary>
-                                {lastClickedObject.parts.map(part =>
-                                    <div key={part}>
-                                        {part}
-                                        <input type={'color'}
-                                               value={tempPosition[lastClickedObject.id].currentColors![part]}
-                                               onChange={(e) => onColorChange(part, e.target.value)}/>
-                                    </div>
-                                )}
+                              <ColorList>
+                                  {lastClickedObject.parts.map(part =>
+                                      <div key={part}>
+                                          {part}
+                                          <input type={'color'}
+                                                 value={tempPosition[lastClickedObject.id].currentColors![part]}
+                                                 onChange={(e) => onColorChange(part, e.target.value)}/>
+                                      </div>
+                                  )}
+                              </ColorList>
                                 <Button onClick={onPull}
                                         fullWidth
                                         size={'sm'}

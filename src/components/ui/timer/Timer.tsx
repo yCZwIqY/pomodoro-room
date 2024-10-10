@@ -16,10 +16,10 @@ const TimerContainer = styled(DetailContainer)`
   align-items: center;
   max-width: 45dvw;
   min-width: 220px;
-  height: ${({ isOpen }) => (isOpen ? '260px' : '20px')};
+  height: ${({ $isOpen }) => ($isOpen ? '260px' : '20px')};
 
   @media ${({ theme }) => theme.device.tablet} {
-    height: ${({ isOpen }) => (isOpen ? '200px' : '20px')};
+    height: ${({ $isOpen }) => ($isOpen ? '200px' : '20px')};
   }
 `;
 
@@ -52,7 +52,7 @@ export default function Timer() {
   };
 
   return (
-    <TimerContainer display={isEditMode} onToggle={onToggle} isOpen={isOpen}>
+    <TimerContainer display={isEditMode} onToggle={onToggle} $isOpen={isOpen}>
       {timeType === 'NONE' ? (
         <TimerForm onSubmit={onStartTimer} />
       ) : (
@@ -69,7 +69,7 @@ export default function Timer() {
           />
         </>
       )}
-      <SummaryContainer>POMODORO TIMER</SummaryContainer>
+      <SummaryContainer>POMODORO TIMER </SummaryContainer>
       <RoutineCompleteDialog
         num={getToken()}
         onCloseModal={onCloseModal}

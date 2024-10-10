@@ -1,7 +1,6 @@
-import { FurnitureData } from '@store/useMyFurnitureStore.ts';
-import { Canvas } from '@react-three/fiber';
-import { useMemo, useState } from 'react';
-import FurnitureModel from '@components/room/model/FurnitureModel.tsx';
+import {FurnitureData} from '@store/useMyFurnitureStore.ts';
+import {Canvas} from '@react-three/fiber';
+import {useMemo} from 'react';
 import styled from 'styled-components';
 import FurnitureModelViewer from '@components/room/model/FurnitureModelViewer.tsx';
 import useMyBagStore from '@store/useMyBagStore.ts';

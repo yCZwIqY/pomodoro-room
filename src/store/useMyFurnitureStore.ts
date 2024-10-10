@@ -40,8 +40,18 @@ interface FurnitureDataStore {
 const useMyFurnitureStore = create<FurnitureDataStore>((set) => ({
     myFurniture: {
         furniture: [],
-        wallpaper: {},
-        tile: {}
+        wallpaper:{
+            id: '',
+            name: '',
+            path: '',
+            category: '',
+        },
+        tile:  {
+            id: '',
+            name: '',
+            path: '',
+            category: '',
+        }
     },
     updateFurnitureData: (data: FurnitureData[]) =>
         set((state) => {

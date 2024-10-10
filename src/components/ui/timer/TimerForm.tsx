@@ -16,11 +16,14 @@ const StartButtonContainer = styled.div`
   justify-content: center;
 `;
 
-export default function TimerForm({ onSubmit }) {
+
+interface TimerFormProps {
+    onSubmit: (data: object) => void
+}
+export default function TimerForm({ onSubmit }: TimerFormProps) {
   const {
     control,
-    handleSubmit,
-    formState: { errors }
+    handleSubmit
   } = useForm<TimerFormData>({
     defaultValues: {
       focusTime: 25,

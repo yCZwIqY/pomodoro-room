@@ -18,11 +18,11 @@ const ShopNavButton = styled.ul`
 export default function ShopNav() {
     const navigate = useNavigate();
     const location = useLocation()
-    const onClick = (path) => {
+    const onClick = (path: string) => {
         navigate(path);
     }
 
-    const isSelected = (path) => location.pathname.split('/').pop() === path;
+    const isSelected = (path: string) => location.pathname.split('/').pop() === path;
 
     return <ShopNavContainer>
         <div style={{marginRight: '15px'}}>

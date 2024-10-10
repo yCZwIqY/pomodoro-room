@@ -93,7 +93,7 @@ export default function MyBag() {
       {showCloseBtn && <CloseButton onClick={onClose} />}
       <MyBagList>
         {getAllMyBag().map((it) => (
-          <MyBagItem data={it} key={it.id} />
+          <MyBagItem data={it} key={`${it.id}-${it.key}`} />
         ))}
       </MyBagList>
     </MyBagContainer>

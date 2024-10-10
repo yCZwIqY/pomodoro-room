@@ -10,7 +10,7 @@ interface FurnitureModelProps {
 }
 
 export default function FurnitureModel({ data, sequenceNo}: FurnitureModelProps) {
-  const { nodes, materials: originMaterials } = useGLTF(`/models/furniture/${data.path}`);
+  const { nodes } = useGLTF(`/models/furniture/${data.path}`);
   const meshes = useMemo(() => Object.values(nodes).filter(it => !it.isGroup), [nodes])
   const [rotation, setRotation] = useState(data.rotation);
   const [hovered, setHovered] = useState(false);
@@ -69,7 +69,7 @@ export default function FurnitureModel({ data, sequenceNo}: FurnitureModelProps)
     }, [nodes, objectRef]);
 
   const convertedRotation = () =>
-    rotation.map((it) => THREE.MathUtils.degToRad(it));
+    rotation.map((it) => THREE.MathUtils.degToRad(it)) as [number, number, number]
 
   const isSelected = useMemo(
     () => targetObject != null && targetObject === objectRef.current,
@@ -127,8 +127,8 @@ export default function FurnitureModel({ data, sequenceNo}: FurnitureModelProps)
               {
                   meshes.map(it =>
                       <mesh
-                          castShadow
-                          receiveShadow
+                          castShadow={true}
+                          receiveShadow={true}
                           {...it}
                       >
                           {(isSelected || isLastSelected || (canEdit && hovered)) && (

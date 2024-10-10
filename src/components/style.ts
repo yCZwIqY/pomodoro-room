@@ -10,8 +10,8 @@ export const DetailContainer = styled.details`
   box-shadow: 0 4px 1px ${({ theme }) => theme.colors.shadow};
   transition: height 0.3s ease-in-out;
   *:not(summary) {
-    opacity: ${({ isOpen }) => (isOpen ? 100 : 0)};
-    transition: ${({ isOpen }) => (isOpen ? 'opacity 0.8s' : 'none')};
+    opacity: ${({ $isOpen }) => ($isOpen ? 100 : 0)};
+    transition: ${({ $isOpen }) => ($isOpen ? 'opacity 0.8s' : 'none')};
   }
 
   summary {

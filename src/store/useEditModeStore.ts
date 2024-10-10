@@ -12,7 +12,7 @@ interface EditModeStore {
     setLastClickedObject: (id: FurnitureData | null) => void;
     targetObject: object | null;
     targetObjectId: string | null;
-    setTargetObject: (obj: object, id: string | null) => void;
+    setTargetObject: (obj: any, id: string | null) => void;
     reset: number;
     setReset: () => void;
     tempPosition: TempPosition;

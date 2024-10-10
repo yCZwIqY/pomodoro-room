@@ -64,7 +64,7 @@ const useMyBagStore = create<MyBagStore>((set) => ({
           return it;
         });
       } else {
-        newData[data.category].push({ ...data, count: 1 });
+        newData[data.category].push({ ...data, count: 1 } as FurnitureData);
       }
 
       localStorage.removeItem('myBag');

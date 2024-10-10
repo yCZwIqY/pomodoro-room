@@ -1,14 +1,18 @@
 import styled from 'styled-components';
 import { MouseEventHandler } from 'react';
 
-export const IconButtonContainer = styled.button`
+export const IconButtonContainer = styled.button<{
+  $url: string;
+  $buttonColor: ButtonColor;
+  $size: string;
+}>`
   background: ${({ $url }) => `url("${$url}") center/70% no-repeat`};
   background-color: ${({ theme, $buttonColor }) =>
     `${theme.buttonColors[$buttonColor].bg}`};
   box-shadow: ${({ theme, $buttonColor }) =>
     `0 5px 1px ${theme.buttonColors[$buttonColor].shadow}`};
-  width: ${({ size }) => `${size}`};
-  height: ${({ size }) => `${size}`};
+  width: 35px;
+  height: 35px;
   border: 3px solid white;
   outline: none;
   display: inline-block;
@@ -39,10 +43,6 @@ export const IconButtonContainer = styled.button`
     }
   }
 
-  @media ${({ theme }) => theme.device.tablet} {
-    width: 35px;
-    height: 35px;
-  }
 `;
 
 interface IconButtonProps {
@@ -66,10 +66,10 @@ export default function IconButton({
     <IconButtonContainer
       $url={url}
       type={'button'}
-      $buttonColor={buttonColor}
+      $buttonColor={buttonColor ?? 'blue'}
       disabled={disabled}
       onClick={onClick}
-      size={size}
+      $size={size?? '30px'}
     />
   );
 }

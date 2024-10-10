@@ -1,7 +1,11 @@
 import styled from 'styled-components';
-import { MouseEventHandler } from 'react';
+import {MouseEventHandler} from 'react';
 
-export const ButtonContainer = styled.button`
+export const ButtonContainer = styled.button<{
+    $buttonColor: ButtonColor;
+    $size: string;
+    $fullWidth?: boolean
+}>`
   background-color: ${({ theme, $buttonColor }) =>
     `${theme.buttonColors[$buttonColor].bg}`};
   box-shadow: ${({ theme, $buttonColor }) =>
@@ -77,10 +81,10 @@ export default function Button({
 }: ButtonProps) {
   return (
     <ButtonContainer
-      $buttonColor={buttonColor}
+      $buttonColor={buttonColor ?? 'blue'}
       disabled={disabled}
       $fullWidth={fullWidth}
-      $size={size}
+      $size={size?? 'md'}
       onClick={onClick}
     >
       {children}
