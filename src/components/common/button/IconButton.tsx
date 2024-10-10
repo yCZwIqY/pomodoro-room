@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { MouseEventHandler } from 'react';
 
 export const IconButtonContainer = styled.button`
-  background: ${({ url }) => `url("${url}") center/70% no-repeat`};
+  background: ${({ $url }) => `url("${$url}") center/70% no-repeat`};
   background-color: ${({ theme, $buttonColor }) =>
     `${theme.buttonColors[$buttonColor].bg}`};
   box-shadow: ${({ theme, $buttonColor }) =>
@@ -64,7 +64,7 @@ export default function IconButton({
 }: IconButtonProps) {
   return (
     <IconButtonContainer
-      url={url}
+      $url={url}
       type={'button'}
       $buttonColor={buttonColor}
       disabled={disabled}

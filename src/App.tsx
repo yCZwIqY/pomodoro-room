@@ -1,9 +1,9 @@
 import './App.css';
-import { RouterProvider, useLocation, useNavigate } from 'react-router-dom';
+import {RouterProvider} from 'react-router-dom';
 import router from './router';
-import { ThemeProvider } from 'styled-components';
+import {ThemeProvider} from 'styled-components';
 import theme from './theme';
-import { useEffect, useRef } from 'react';
+import {useEffect, useRef} from 'react';
 import useTokenStore from '@store/useTokenStore.tsx';
 import useMyFurnitureStore from '@store/useMyFurnitureStore.ts';
 import useMyBagStore from '@store/useMyBagStore.ts';

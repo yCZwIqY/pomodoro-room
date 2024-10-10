@@ -54,10 +54,10 @@ export default function TimeInput({
   value,
   onChange,
   step = 5,
-  maxValue,
-  minValue
+  maxValue = 0,
+  minValue = 0
 }: TimeInputProps) {
-  const onButtonClick = (dir) => {
+  const onButtonClick = (dir: number) => {
     if (value <= minValue && dir < 0) {
       return;
     }

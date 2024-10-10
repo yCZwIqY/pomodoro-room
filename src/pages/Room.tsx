@@ -1,16 +1,15 @@
-import { useRef } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import {useRef} from 'react';
+import {Canvas} from '@react-three/fiber';
+import {OrbitControls} from '@react-three/drei';
 import Timer from '@components/ui/timer/Timer.tsx';
 import Token from '@components/ui/Token.tsx';
 import MyBagComponent from '@components/room/MyBag.tsx';
 import useEditModeStore from '@store/useEditModeStore.ts';
 import useMyFurnitureStore from '@store/useMyFurnitureStore.ts';
-import styled, { keyframes } from 'styled-components';
-import { CameraController } from '@components/room/CameraController.tsx';
+import styled, {keyframes} from 'styled-components';
 import RoomModel from '@components/room/model/RoomModel.tsx';
-import { SideNavigation } from '@components/ui/SideNavigation.tsx';
-import { useNavigate } from 'react-router-dom';
+import {SideNavigation} from '@components/ui/SideNavigation.tsx';
+import {useNavigate} from 'react-router-dom';
 import FurnitureInfo from '@components/ui/FurnitureInfo.tsx';
 import useMyBagStore from '@store/useMyBagStore.ts';
 

@@ -1,6 +1,28 @@
 import { create } from 'zustand';
+import {FurnitureData} from "@store/useMyFurnitureStore.ts";
 
-const useEditModeStore = create((set) => ({
+interface TempPosition {
+    [id: string]: FurnitureData
+}
+
+interface EditModeStore {
+    isEditMode: boolean;
+    onToggleMode: () => void;
+    lastClickedObject: FurnitureData;
+    setLastClickedObject: (id: FurnitureData | null) => void;
+    targetObject: object | null;
+    targetObjectId: string | null;
+    setTargetObject: (obj: object, id: string | null) => void;
+    reset: number;
+    setReset: () => void;
+    tempPosition: TempPosition;
+    setTempPosition: (id: string, pos: object) => void;
+    initTempPosition: (furniture: Array<{ id: string }>) => void;
+    removeTempPosition: (id: string) => void;
+}
+
+
+const useEditModeStore = create<EditModeStore>((set) => ({
   isEditMode: false,
   onToggleMode: () =>
     set((state) => ({

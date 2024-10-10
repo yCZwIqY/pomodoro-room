@@ -1,5 +1,4 @@
-import styled, { keyframes } from 'styled-components';
-import { useEffect, useState } from 'react';
+import styled, {keyframes} from 'styled-components';
 
 const roomBgMove = keyframes`
     0% {

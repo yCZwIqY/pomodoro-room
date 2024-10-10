@@ -1,7 +1,6 @@
 import ShopNav from "@components/shop/ShopNav.tsx";
 import {Outlet} from "react-router";
-import {Suspense, useEffect, useState} from "react";
-import Loading from "@pages/Loading.tsx";
+import {useEffect, useState} from "react";
 import Token from "@components/ui/Token.tsx";
 import styled from "styled-components";
 

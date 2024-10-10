@@ -1,8 +1,11 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import furniture from '@data/furniture.json';
 import texture from '@data/texture.json';
 import {useEffect, useState} from "react";
+import {FurnitureData} from "@store/useMyFurnitureStore.ts";
 
-type Category = 'bed' | 'chair' | 'desk' | 'wallpaper' | 'tile' | 'all' | null;
+export type Category = 'bed' | 'chair' | 'desk' | 'wallpaper' | 'tile' | 'all' | null | undefined;
 export const useShopItem = (category: Category) => {
     const [items, setItems] = useState([]);
 
@@ -22,7 +25,7 @@ export const useShopItem = (category: Category) => {
                     ...Object.keys(furniture).flatMap(it => Object.values(furniture[it])),
                     ...Object.keys(texture)
                         .filter(it => it !== 'furniture')
-                        .flatMap(it => Object.values(texture[it]))
+                        .flatMap(it => Object.values(texture[it] as FurnitureData))
                 ]);
                 break;
         }

@@ -24,9 +24,6 @@
     /*  Absolute Path */
     "baseUrl": ".",
     "paths": {
-      //      "@/*": [
-      //        "./src/*"
-      //      ],
       "@components/*": [
         "./src/components/*"
       ],
@@ -47,7 +44,7 @@
       ],
       "@hooks/*": [
         "./src/hooks/*"
-      ]
+      ],
     },
     "types": [
       "@types/styled-components"

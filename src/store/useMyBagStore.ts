@@ -1,8 +1,21 @@
-import { create } from 'zustand';
+import {create} from 'zustand';
 import furniture from '@data/furniture.json';
 import texture from '@data/texture.json';
+import {FurnitureData} from "@store/useMyFurnitureStore.ts";
 
-const useMyBagStore = create((set) => ({
+interface MyBagStore {
+    myBag: {
+        [key:string]: FurnitureData[]
+    };
+    pull: (category: string, key: string) => void;
+    put: (category: string, key: string) => void;
+    buy: (data: object) => void;
+    init: () => void;
+    saveBag: () => void;
+
+}
+
+const useMyBagStore = create<MyBagStore>((set) => ({
   myBag: {},
   pull: (category, key) =>
     set((state) => {

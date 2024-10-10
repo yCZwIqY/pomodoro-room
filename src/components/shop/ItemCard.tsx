@@ -27,7 +27,7 @@ export default function ItemCard({item}: ItemCardProps) {
 
     useEffect(() => {
         if (['tile', 'wallpaper'].includes(item.category)
-            && myBag[item.category].find(it => it.key === item.key)) {
+            && myBag[item.category].find((it: FurnitureData) => it.key === item.key)) {
             setText("보유중");
 
         } else if (item.price > token) {
@@ -35,11 +35,10 @@ export default function ItemCard({item}: ItemCardProps) {
         }
 
     }, []);
-    const isDisabled = () => {
+    const isDisabled = (): boolean => {
         return item.price > token
-            || (
-                ['tile', 'wallpaper'].includes(item.category)
-                && myBag[item.category].find(it => it.key === item.key)
+            || (['tile', 'wallpaper'].includes(item.category)
+                && myBag[item.category].filter((it:FurnitureData) => it.key === item.key).length > 0
             )
     }
 

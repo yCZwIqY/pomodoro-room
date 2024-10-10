@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import STYLE from '../../theme';
+
 export const CommonContainer = styled.div`
   background: white;
   padding: 20px;
