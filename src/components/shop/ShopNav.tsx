@@ -28,7 +28,7 @@ export default function ShopNav() {
         <div style={{marginRight: '15px'}}>
             <IconButton
                 url={'/icons/home.svg'}
-                onClick={() => onClick('/room')}
+                onClick={() => onClick('/')}
                 size={'40px'}
             />
         </div>
