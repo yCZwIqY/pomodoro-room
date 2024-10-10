@@ -42,6 +42,7 @@ export default function RoomModel() {
     }, [myFurniture.furniture, isEditMode]);
 
     useFrame(({pointer}) => {
+
         if (isEditMode && targetObject) {
 
             raycaster.setFromCamera(pointer, camera);

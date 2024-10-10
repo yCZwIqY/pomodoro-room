@@ -1,27 +1,18 @@
-import { useGLTF } from '@react-three/drei';
-import {useMemo} from "react";
+import {useLoader} from "@react-three/fiber";
+import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
+
 interface FurnitureModelViewer {
   path: string;
-  modelKey: string;
 }
 
 export default function FurnitureModelViewer({
   path,
-  modelKey
 }: FurnitureModelViewer) {
-  const { nodes, materials } = useGLTF(`/models/furniture/${path}`);
-  const yPos = useMemo(() => Math.min(nodes[modelKey].geometry.boundingBox.max.z - 1.5, -0.3), [nodes]);
+  const object = useLoader(GLTFLoader,`/models/furniture/${path}`);
+
   return (
-    <group position={[0, yPos , 0]}
-           rotation={[0, 0, 0]}>
-      {nodes[modelKey] && (
-        <mesh
-          geometry={nodes[modelKey].geometry}
-          scale={nodes[modelKey].scale}
-          {...nodes}
-          material={materials['Material']}
-        ></mesh>
-      )}
+    <group position={[0,-0.8,0]}>
+      <primitive object={object.scene}/>
     </group>
   );
 }

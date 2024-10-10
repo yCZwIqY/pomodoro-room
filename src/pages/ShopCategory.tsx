@@ -27,7 +27,10 @@ const ShopItemList = styled.ul`
     height: 100%;
     width: -webkit-fill-available;
     justify-content: center;
-    //align-content: center;
+    background-color: rgba(255,255,255,0.2);
+    padding: 20px;
+    margin: 20px;
+    border-radius: 20px;
 `
 export default function ShopCategory() {
     const params = useParams();

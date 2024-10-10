@@ -80,8 +80,7 @@ export default function ItemCard({item}: ItemCardProps) {
                     castShadow={false}
                 />
                 <color attach="background" args={['#9999A4']}/>
-                <FurnitureModelViewer path={item.path}
-                                      modelKey={item.key}/>
+                <FurnitureModelViewer path={item.path} />
             </Canvas>
         }
         {item.name}

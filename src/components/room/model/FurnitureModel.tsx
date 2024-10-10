@@ -4,9 +4,6 @@ import {Outlines, useGLTF} from '@react-three/drei';
 import {FurnitureData} from '@store/useMyFurnitureStore.ts';
 import useEditModeStore from '@store/useEditModeStore.ts';
 import {gsap} from "gsap";
-import {useLoader} from "@react-three/fiber";
-import {hash} from "three/src/nodes/math/HashNode";
-
 interface FurnitureModelProps {
   sequenceNo: number;
   data: FurnitureData;
@@ -14,6 +11,7 @@ interface FurnitureModelProps {
 
 export default function FurnitureModel({ data, sequenceNo}: FurnitureModelProps) {
   const { nodes, materials: originMaterials } = useGLTF(`/models/furniture/${data.path}`);
+  const meshes = useMemo(() => Object.values(nodes).filter(it => !it.isGroup), [nodes])
   const [rotation, setRotation] = useState(data.rotation);
   const [hovered, setHovered] = useState(false);
   const objectRef = useRef(null);
@@ -30,9 +28,6 @@ export default function FurnitureModel({ data, sequenceNo}: FurnitureModelProps)
       tempPosition
   } = useEditModeStore();
   const canEdit = useMemo(() => isEditMode && isMovable, [isMovable, isEditMode]);
-    const [texturePath, setTexturePath] = useState(null);
-    const [materials, setMaterials] = useState(originMaterials['Material'].clone())
-    const texture = texturePath  ? useLoader(THREE.TextureLoader, texturePath) : null;
 
 
   useEffect(() => {
@@ -57,34 +52,10 @@ export default function FurnitureModel({ data, sequenceNo}: FurnitureModelProps)
       onComplete: () => setIsMovable(true)
     });
 
-    setMaterials(originMaterials['Material'].clone())
   }, []);
 
-    useEffect(() => {
-        if (data.hasTexture) {
-            const path = `textures/furniture/${data.category}/${data.key}/${data.key}_texture_${tempPosition[data.id].currentTexture}.png`;
-            setTexturePath(path);
-        }
 
-    }, [data, tempPosition[data.id]]);
-
-    useEffect(() => {
-        if (texture) {
-            console.log('texture update')
-            texture.wrapS = THREE.RepeatWrapping;
-            texture.wrapT = THREE.RepeatWrapping;
-            texture.repeat.set(2, 2); // 텍스처의 반복 횟수 조정
-            texture.offset.set(2, 2); // 텍스처의 오프셋 설정
-            texture.center.set(0, 0); // 텍스처의 중심점 설정
-            // texture.rotation = 0; // 필요하다면 텍스처 회전
-            // texture.needsUpdate = true;
-
-            materials.map = texture;
-        }
-    }, [texture]);
-
-
-    useEffect(() => {
+  useEffect(() => {
         if (realMeshRef.current) {
             const box = new THREE.Box3().setFromObject(realMeshRef.current);
             const size = new THREE.Vector3();
@@ -109,15 +80,6 @@ export default function FurnitureModel({ data, sequenceNo}: FurnitureModelProps)
     [lastClickedObject]
   );
 
-  const getTexture = () => {
-      if(!data.hasTexture) {
-          return materials.map
-      }
-      console.log(data.id, texture?? 'no texture')
-      return texture ?? materials.map
-  }
-
-  
   return (
     <>
       <group
@@ -161,22 +123,21 @@ export default function FurnitureModel({ data, sequenceNo}: FurnitureModelProps)
 
           }}
       >
-          <mesh
-              ref={realMeshRef}
-              castShadow={true}
-              receiveShadow={true}
-              geometry={nodes[data.key].geometry}
-              scale={nodes[data.key].scale}
-              {...nodes}
-              material={materials}
-          >
-              {(isSelected || isLastSelected || (canEdit && hovered)) && (
-                  <Outlines thickness={2} color={isSelected ? 'red' : '#228AED'}/>
-              )}
-              <meshToonMaterial
-                  map={materials.map}
-              />
-          </mesh>
+          <group ref={realMeshRef}>
+              {
+                  meshes.map(it =>
+                      <mesh
+                          castShadow
+                          receiveShadow
+                          {...it}
+                      >
+                          {(isSelected || isLastSelected || (canEdit && hovered)) && (
+                              <Outlines thickness={2} color={isSelected ? 'red' : '#228AED'}/>
+                          )}
+                          <meshToonMaterial color={tempPosition[data.id].currentColors[it.name] ?? it.material.color}/>
+                      </mesh>)
+              }
+          </group>
           <mesh
               ref={hitBoxRef}
           >

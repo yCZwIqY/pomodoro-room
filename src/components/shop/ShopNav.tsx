@@ -6,6 +6,7 @@ const ShopNavContainer = styled.nav`
     display: flex;
     height: 30px;
     padding: 15px;
+    margin-bottom: 20px;
 `;
 
 const ShopNavButton = styled.ul`
@@ -21,7 +22,6 @@ export default function ShopNav() {
         navigate(path);
     }
 
-    console.log(location)
     const isSelected = (path) => location.pathname.split('/').pop() === path;
 
     return <ShopNavContainer>

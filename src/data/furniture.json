@@ -7,8 +7,13 @@
       "category": "bed",
       "position": [0, 0, 0],
       "rotation": [0, 0, 0],
-      "hasTexture": true,
-      "textures": ["blue", "pink"],
+      "parts": ["frame", "mattress", "pillow", "covers"],
+      "currentColors": {
+        "frame": "#FFFFFF",
+        "mattress": "#FFFFFF",
+        "pillow": "#96E7E5",
+        "covers": "#96E7E5"
+      },
       "price": 10
     }
   },
@@ -20,7 +25,11 @@
       "category": "chair",
       "position": [0, 0, 0],
       "rotation": [0, 180, 0],
-      "hasTexture": false,
+      "parts": ["frame", "cushion"],
+      "currentColors": {
+        "frame": "#FFFFFF",
+        "cushion": "#96E7E5"
+      },
       "price": 10
     }
   },
@@ -32,7 +41,12 @@
       "category": "desk",
       "position": [0, 0, 0],
       "rotation": [0, 0, 0],
-      "hasTexture": false,
+      "parts": ["desk", "drawer", "handle"],
+      "currentColors": {
+        "desk": "#FFFFFF",
+        "drawer": "#FFFFFF",
+        "handle": "#707070"
+      },
       "price": 10
     },
     "l_shaped_desk": {
@@ -42,7 +56,16 @@
       "category": "desk",
       "position": [0, 0, 0],
       "rotation": [0, 0, 0],
-      "hasTexture": false,
+      "parts": ["desk", "side_desk", "column", "book_1", "book_2", "book_3", "book_inside"],
+      "currentColors": {
+        "desk": "#FFFFFF",
+        "side_desk": "#FFFFFF",
+        "column": "#B8B8B8",
+        "book_1": "#5A94E7",
+        "book_2": "#F46A6C",
+        "book_3": "#E7B662",
+        "book_inside": "#FFFFFF"
+      },
       "price": 15
     }
   }

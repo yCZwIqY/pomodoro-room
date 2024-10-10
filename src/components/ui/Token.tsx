@@ -3,12 +3,12 @@ import useTokenStore from '@store/useTokenStore.tsx';
 
 const TokenContainer = styled.div`
   position: absolute;
-  left: 10px;
+  ${({$position}) => `${$position}: 10px;`}
   top: 10px;
   background-color: #ffffff49;
   border-radius: 21px;
   height: 30px;
-  width: 150px;
+  width: 130px;
   display: flex;
   align-items: center;
 
@@ -29,11 +29,15 @@ const TokenLabel = styled.div`
   color: white;
 `;
 
-export default function Token() {
+interface TokenProps {
+    position?: 'left' | 'right';
+
+}
+export default function Token({position = 'left'}: TokenProps) {
   const { token } = useTokenStore();
 
   return (
-    <TokenContainer>
+    <TokenContainer $position={position}>
       <TokenLabel>{token}</TokenLabel>
     </TokenContainer>
   );
