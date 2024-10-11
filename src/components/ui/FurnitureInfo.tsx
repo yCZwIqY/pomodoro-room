@@ -25,7 +25,7 @@ const ColorList = styled.ul`
 `;
 
 const ColorInput = styled.input`
-    width: 25px;
+    width: 30px;
     height:20px;
     border: none;
     outline: none;
@@ -35,13 +35,14 @@ const ColorInput = styled.input`
     -moz-appearance: none;
     appearance: none;
     background-color: transparent;
-    box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2);
+    
     
     &::-webkit-color-swatch {
         padding: 0;
         border-radius: 8px;
         border: 0;
         outline: none;
+        box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2);
     }
 `;
 
@@ -98,7 +99,7 @@ export default function FurnitureInfo() {
                                         fullWidth
                                         size={'sm'}
                                         buttonColor={'red'}>
-                                    넣기
+                                    가방에 넣기
                                 </Button>
                             </>
                         ) : (

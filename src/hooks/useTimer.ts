@@ -9,7 +9,7 @@ export interface TimerFormData {
 type TimeType = 'NONE' | 'FOCUS' | 'REST';
 
 const useTimer = (onCompleteRoutine: (token: number) => void) => {
-  const [timeType, setTimeType] = useState<TimeType>('NONE');
+  const timeType = useRef<TimeType>('NONE');
   const [isPaused, setIsPaused] = useState(false);
   const [remainingTime, setRemainingTime] = useState(0);
 
@@ -32,15 +32,15 @@ const useTimer = (onCompleteRoutine: (token: number) => void) => {
     intervalRef.current = setInterval(() => {
       const now = Date.now();
       const timeLeft = Math.round((endTimeRef.current - now) / 1000);
-
       if (timeLeft <= 0) {
         clearInterval(intervalRef.current!);
-        if (timeType === 'FOCUS') {
+        if (timeType.current === 'FOCUS') {
           onStartRest();
-        } else if (timeType === 'REST') {
+        } else if (timeType.current === 'REST') {
           currentRepeatCount.current++;
           if (currentRepeatCount.current >= repeatCount.current) {
             const token = getToken();
+            timeType.current = 'NONE'
             onCompleteRoutine(token);
           } else {
             onStartFocus();
@@ -50,7 +50,7 @@ const useTimer = (onCompleteRoutine: (token: number) => void) => {
         setRemainingTime(timeLeft);
       }
     }, 1000);
-  }, [timeType, onCompleteRoutine, getToken]);
+  }, [timeType.current, onCompleteRoutine, getToken]);
 
   const onStartTimer = useCallback((data: TimerFormData) => {
     focusTime.current = data.focusTime;
@@ -64,7 +64,7 @@ const useTimer = (onCompleteRoutine: (token: number) => void) => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
-    setTimeType('FOCUS');
+    timeType.current = 'FOCUS';
     const duration = focusTime.current * 60;
     startTimeRef.current = Date.now();
     endTimeRef.current = startTimeRef.current + duration * 1000;
@@ -76,7 +76,7 @@ const useTimer = (onCompleteRoutine: (token: number) => void) => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
-    setTimeType('REST');
+    timeType.current = 'REST';
     const duration = restTime.current * 60;
     startTimeRef.current = Date.now();
     endTimeRef.current = startTimeRef.current + duration * 1000;
@@ -102,11 +102,11 @@ const useTimer = (onCompleteRoutine: (token: number) => void) => {
   const onStop = useCallback(() => {
     clearInterval(intervalRef.current);
     intervalRef.current = 0;
-    setTimeType('NONE');
+    timeType.current = 'NONE'
   }, []);
 
   return {
-    timeType,
+    timeType: timeType.current,
     isPaused,
     remainingTime,
     currentRepeatCount: currentRepeatCount.current,

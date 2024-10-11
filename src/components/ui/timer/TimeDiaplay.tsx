@@ -3,10 +3,10 @@ import styled from 'styled-components';
 const TimeLabel = styled.div`
   width: 100%;
   text-align: center;
-  background-color: ${({ isFocus, theme }) =>
-    isFocus ? theme.colors['sub-base'] : '#FBDBFF'};
-  color: ${({ isFocus, theme }) =>
-    isFocus ? theme.colors['text-accent'] : '#FF7AD8'};
+  background-color: ${({ $isFocus, theme }) =>
+    $isFocus ? theme.colors['sub-base'] : '#FBDBFF'};
+  color: ${({ $isFocus, theme }) =>
+    $isFocus ? theme.colors['text-accent'] : '#FF7AD8'};
   font-size: 21px;
   padding: 18px 0;
   border-bottom-right-radius: 18px;
@@ -30,7 +30,7 @@ const RepeatLabel = styled.div`
 
 const TimeTypeLabel = styled.div`
   margin-top: 10px;
-  background-color: ${({ isFocus }) => (isFocus ? '#3ECEFE' : '#FF7AD8')};
+  background-color: ${({ $isFocus }) => ($isFocus ? '#3ECEFE' : '#FF7AD8')};
   color: white;
   font-size: ${({ theme }) => theme.fontSize.lg};
   padding: 10px;
@@ -63,10 +63,10 @@ const TimerDisplay = ({
   return (
     <>
       <RepeatLabel>{currentRepeatCount + 1} 번째 반복</RepeatLabel>
-      <TimeTypeLabel isFocus={timeType === 'FOCUS'}>
+      <TimeTypeLabel $isFocus={timeType === 'FOCUS'}>
         {timeType === 'FOCUS' ? '집중' : '휴식'}
       </TimeTypeLabel>
-      <TimeLabel isFocus={timeType === 'FOCUS'}>
+      <TimeLabel $isFocus={timeType === 'FOCUS'}>
         {getMin()} : {getSec()}
       </TimeLabel>
     </>
