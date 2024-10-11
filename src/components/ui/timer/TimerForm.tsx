@@ -85,6 +85,7 @@ export default function TimerForm({ onSubmit }: TimerFormProps) {
             onChange={onChange}
             unit={'번'}
             minValue={1}
+            maxValue={100}
             step={1}
             label={'반복'}
           />
