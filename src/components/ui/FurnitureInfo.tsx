@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import {DetailContainer, SummaryContainer} from '@components/style.ts';
 import Button from '@components/common/button/Button.tsx';
 import useMyBagStore from '@store/useMyBagStore.ts';
-import {SyntheticEvent, useState} from "react";
 import {useDetailSummary} from "@hooks/useDetailSummary.ts";
 
 const FurnitureInfoContainer = styled(DetailContainer)<{
@@ -16,9 +15,34 @@ const FurnitureInfoContainer = styled(DetailContainer)<{
 
 `;
 
-const ColorList = styled.div`
+const ColorList = styled.ul`
+    list-style: none;
+    & > li {
+        display: flex;
+        justify-content: space-between;
+        margin: 5px 0;
+    }
+`;
 
-`
+const ColorInput = styled.input`
+    width: 25px;
+    height:20px;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: transparent;
+    
+    &::-webkit-color-swatch {
+        padding: 0;
+        border-radius: 8px;
+        border: 0;
+        outline: none;
+    }
+`;
 
 
 const FurnitureInfoSummary = styled(SummaryContainer)``;
@@ -61,12 +85,12 @@ export default function FurnitureInfo() {
                                 </FurnitureInfoSummary>
                               <ColorList>
                                   {lastClickedObject.parts.map(part =>
-                                      <div key={part}>
-                                          {part}
-                                          <input type={'color'}
+                                      <li key={part}>
+                                          <div>{part}</div>
+                                          <ColorInput type={'color'}
                                                  value={tempPosition[lastClickedObject.id].currentColors![part]}
                                                  onChange={(e) => onColorChange(part, e.target.value)}/>
-                                      </div>
+                                      </li>
                                   )}
                               </ColorList>
                                 <Button onClick={onPull}

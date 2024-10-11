@@ -85,7 +85,7 @@ export default function FurnitureModel({ data, sequenceNo}: FurnitureModelProps)
       <group
           ref={objectRef}
           position={data.position}
-          key={data.id ?? data.key}
+          key={data.id}
           rotation={convertedRotation()}
           onPointerDown={(e) => {
             e.stopPropagation();
@@ -127,6 +127,7 @@ export default function FurnitureModel({ data, sequenceNo}: FurnitureModelProps)
               {
                   meshes.map(it =>
                       <mesh
+                          key={`${data.id}-${it.name}`}
                           castShadow={true}
                           receiveShadow={true}
                           {...it}

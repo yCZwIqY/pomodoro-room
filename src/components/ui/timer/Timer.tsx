@@ -11,7 +11,7 @@ import { DetailContainer, SummaryContainer } from '@components/style.ts';
 import { useDetailSummary } from '@hooks/useDetailSummary.ts';
 
 const TimerContainer = styled(DetailContainer)`
-  display: ${({ display }) => (display ? 'none' : 'flex')};
+  display: ${({ $display }) => ($display ? 'none' : 'flex')};
   flex-direction: column;
   align-items: center;
   max-width: 45dvw;
@@ -52,7 +52,7 @@ export default function Timer() {
   };
 
   return (
-    <TimerContainer display={isEditMode} onToggle={onToggle} $isOpen={isOpen}>
+    <TimerContainer $display={isEditMode} onToggle={onToggle} $isOpen={isOpen}>
       {timeType === 'NONE' ? (
         <TimerForm onSubmit={onStartTimer} />
       ) : (

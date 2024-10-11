@@ -6,34 +6,38 @@ import FurnitureModelViewer from '@components/room/model/FurnitureModelViewer.ts
 import useMyBagStore from '@store/useMyBagStore.ts';
 import useEditModeStore from '@store/useEditModeStore.ts';
 
-const MyBagItemContainer = styled.div`
+
+interface IsZero {
+  $isZero: boolean;
+}
+const MyBagItemContainer = styled.div<IsZero>`
   padding: 10px;
   position: relative;
-  cursor: ${({ isZero }) => (isZero ? 'no-drop' : 'pointer')};
+  cursor: ${({ $isZero }) => ($isZero ? 'no-drop' : 'pointer')};
 `;
 
-const MyBagItemTextureImg = styled.img`
+const MyBagItemTextureImg = styled.img<IsZero>`
   width: 100px;
   height: 100px;
-  filter: ${({ isZero }) => (isZero ? 'grayscale()' : 'none')};
+  filter: ${({ $isZero }) => ($isZero ? 'grayscale()' : 'none')};
 `;
 
-const NameLabel = styled.div`
+const NameLabel = styled.div<IsZero>`
   text-align: center;
   padding: 5px;
-  background-color: ${({ theme, isZero }) =>
-    isZero ? theme.colors.grey : theme.colors.text};
+  background-color: ${({ theme, $isZero }) =>
+    $isZero ? theme.colors.grey : theme.colors.text};
   color: white;
   border-radius: 5px;
 `;
 
-const CountLabel = styled.div`
+const CountLabel = styled.div<IsZero>`
   position: absolute;
   top: 5px;
   right: 5px;
   padding: 5px;
-  background-color: ${({ theme, isZero }) =>
-    isZero ? theme.colors.grey : theme.colors.base};
+  background-color: ${({ theme, $isZero }) =>
+    $isZero ? theme.colors.grey : theme.colors.base};
   color: white;
   border-radius: 5px;
 `;
@@ -72,9 +76,9 @@ export default function MyBagItem({ data }: MyBagItemProps) {
   };
 
   return (
-    <MyBagItemContainer isZero={isZero}>
+    <MyBagItemContainer $isZero={isZero}>
       {isTexture ? (
-        <MyBagItemTextureImg isZero={isZero} src={getPath()} alt={data.name} />
+        <MyBagItemTextureImg $isZero={isZero} src={getPath()} alt={data.name} />
       ) : (
         <Canvas
           onClick={onClick}
@@ -104,8 +108,8 @@ export default function MyBagItem({ data }: MyBagItemProps) {
           <FurnitureModelViewer path={data.path} modelKey={data.key} />
         </Canvas>
       )}
-      <NameLabel isZero={isZero}>{data.name}</NameLabel>
-      <CountLabel isZero={isZero}>{data.count}</CountLabel>
+      <NameLabel $isZero={isZero}>{data.name}</NameLabel>
+      <CountLabel $isZero={isZero}>{data.count}</CountLabel>
     </MyBagItemContainer>
   );
 }
