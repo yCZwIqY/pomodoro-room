@@ -35,6 +35,7 @@ const ColorInput = styled.input`
     -moz-appearance: none;
     appearance: none;
     background-color: transparent;
+    box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2);
     
     &::-webkit-color-swatch {
         padding: 0;
