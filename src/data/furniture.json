@@ -31,6 +31,20 @@
         "cushion": "#96E7E5"
       },
       "price": 10
+    },
+    "single_sofa": {
+      "key": "single_sofa",
+      "name": "1인용 소파",
+      "path": "chair/single_sofa.glb",
+      "category": "chair",
+      "position": [0, 0, 0],
+      "rotation": [0, 0, 0],
+      "parts": ["sofa", "legs"],
+      "currentColors": {
+        "sofa": "#912632",
+        "legs": "#41221D"
+      },
+      "price": 10
     }
   },
   "desk": {
@@ -67,6 +81,20 @@
         "book_inside": "#FFFFFF"
       },
       "price": 15
+    },
+    "circular_sitting_table": {
+      "key": "circular_sitting_table",
+      "name": "좌식 원형 테이블",
+      "path": "desk/circular_sitting_table.glb",
+      "category": "desk",
+      "position": [0, 0, 0],
+      "rotation": [0, 0, 0],
+      "parts": ["tableTop", "legs"],
+      "currentColors": {
+        "tableTop": "#FF0000",
+        "legs": "#FFFFFF"
+      },
+      "price": 10
     }
   }
 }
