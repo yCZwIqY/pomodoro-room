@@ -1,4 +1,4 @@
-import {FurnitureData} from '@store/useMyFurnitureStore.ts';
+import useMyFurnitureStore, {FurnitureData} from '@store/useMyFurnitureStore.ts';
 import {Canvas} from '@react-three/fiber';
 import {useMemo} from 'react';
 import styled from 'styled-components';
@@ -47,8 +47,9 @@ interface MyBagItemProps {
 }
 
 export default function MyBagItem({ data }: MyBagItemProps) {
-  const { pull } = useMyBagStore();
-  const { setTempPosition, tempPosition } = useEditModeStore();
+  const { pull, put } = useMyBagStore();
+  const {myFurniture} = useMyFurnitureStore();
+  const { setTempPosition, tempCoveringMaterial, setTempCoveringMaterial } = useEditModeStore();
   const isTexture = useMemo<boolean>(
     () => ['wallpaper', 'tile'].includes(data.category),
     [data]
@@ -63,7 +64,7 @@ export default function MyBagItem({ data }: MyBagItemProps) {
     }
   };
 
-  const onClick = () => {
+  const onFurnitureClick = () => {
     if (data.count <= 0) return;
     const id = `${data.key}-${data.deployed}`;
 
@@ -72,16 +73,32 @@ export default function MyBagItem({ data }: MyBagItemProps) {
       position: [0, 0, 0],
       rotation: [0, 0, 0],
     });
+
+    pull(data.category, data.key);
     pull(data.category, data.key);
   };
+
+  const onCoveringMaterialClick = () => {
+    const category = data.category as 'tile' | 'wallpaper'
+
+    console.log(category, tempCoveringMaterial)
+    put(category, tempCoveringMaterial[category].key)
+    pull(data.category, data.key);
+    setTempCoveringMaterial(category, data);
+
+  }
 
   return (
     <MyBagItemContainer $isZero={isZero}>
       {isTexture ? (
-        <MyBagItemTextureImg $isZero={isZero} src={getPath()} alt={data.name} />
+        <MyBagItemTextureImg
+            $isZero={isZero}
+            onClick={onCoveringMaterialClick}
+            src={getPath()}
+            alt={data.name} />
       ) : (
         <Canvas
-          onClick={onClick}
+          onClick={onFurnitureClick}
           key={`my-bag-${data.key}`}
           camera={{
             zoom: 1.5,

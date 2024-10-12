@@ -34,7 +34,7 @@ export default function ItemCard({item}: ItemCardProps) {
             setText("토큰 부족");
         }
 
-    }, []);
+    }, [item.price, token]);
     const isDisabled = (): boolean => {
         return item.price > token
             || (['tile', 'wallpaper'].includes(item.category)

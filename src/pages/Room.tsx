@@ -42,9 +42,12 @@ const RoomContainer = styled.main`
 `;
 
 export default function Room() {
-  const { isEditMode, targetObject, onToggleMode, setReset, tempPosition, initTempPosition } =
-    useEditModeStore();
-  const { myFurniture, updateFurnitureData } = useMyFurnitureStore();
+  const {
+      isEditMode, targetObject, onToggleMode, setReset,
+      tempPosition, initTempPosition, tempCoveringMaterial, initTempCoveringMaterial
+  } =
+      useEditModeStore();
+    const { myFurniture, updateFurnitureData } = useMyFurnitureStore();
   const { saveBag, init } = useMyBagStore();
   const control = useRef(null);
   const navigator = useNavigate();
@@ -66,10 +69,15 @@ export default function Room() {
     init();
     setReset();
     initTempPosition(myFurniture.furniture);
+      initTempCoveringMaterial({
+          wallpaper: myFurniture.wallpaper,
+          tile: myFurniture.tile
+      })
   };
 
   const onClickSave = () => {
-    updateFurnitureData(Object.values(tempPosition));
+      console.log(tempCoveringMaterial)
+    updateFurnitureData(Object.values(tempPosition), tempCoveringMaterial);
     saveBag();
   };
 

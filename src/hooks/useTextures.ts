@@ -7,6 +7,7 @@ export const useTextures = (wallpaperPath: string, tilePath: string) => {
   const [tileTexture, setTileTexture] = useState<THREE.Texture | null>(null);
 
   useEffect(() => {
+    console.log(wallpaperPath)
     const loader = new THREE.TextureLoader();
     loader.load(`/textures/${wallpaperPath}`, setWallPaperTexture);
     loader.load(`/textures/${tilePath}`, setTileTexture);

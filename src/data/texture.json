@@ -12,6 +12,14 @@
       "category": "wallpaper",
       "hasTexture": false,
       "price": 5
+    },
+    "sky_wallpaper": {
+      "key": "sky_wallpaper",
+      "name": "하늘 벽지",
+      "path": "wallpaper/sky_wallpaper.png",
+      "category": "wallpaper",
+      "hasTexture": false,
+      "price": 10
     }
   },
   "tile": {
@@ -19,6 +27,14 @@
       "key": "basic_tile",
       "name": "기본 바닥",
       "path": "tile/basic_tile.png",
+      "category": "tile",
+      "hasTexture": false,
+      "price": 5
+    },
+    "white_tile": {
+      "key": "white_tile",
+      "name": "흰색 타일 바닥",
+      "path": "tile/white_tile.png",
       "category": "tile",
       "hasTexture": false,
       "price": 5

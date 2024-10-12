@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import {FurnitureData} from "@store/useMyFurnitureStore.ts";
+import {FurnitureData, TempCoveringMaterial, Texture} from "@store/useMyFurnitureStore.ts";
 
 interface TempPosition {
     [id: string]: FurnitureData
@@ -19,6 +19,9 @@ interface EditModeStore {
     setTempPosition: (id: string, pos: object) => void;
     initTempPosition: (furniture: Array<{ id: string }>) => void;
     removeTempPosition: (id: string) => void;
+    tempCoveringMaterial: TempCoveringMaterial;
+    initTempCoveringMaterial:(coveringMaterial:TempCoveringMaterial) => void;
+    setTempCoveringMaterial:(type: 'wallpaper' | 'tile', texture: Texture) => void
 }
 
 
@@ -71,7 +74,23 @@ const useEditModeStore = create<EditModeStore>((set) => ({
         ...state,
         tempPosition: { ...state.tempPosition }
       };
-    })
+    }),
+    tempCoveringMaterial: {
+        wallpaper: '',
+        tile: ''
+    },
+    initTempCoveringMaterial: (coveringMaterial) =>
+        set((state) => ({
+            ...state,
+            tempCoveringMaterial: coveringMaterial
+        })),
+    setTempCoveringMaterial: (category, texture) => set((state) => ({
+        ...state,
+        tempCoveringMaterial: {
+            ...state.tempCoveringMaterial,
+            [category]: texture
+        }
+    }))
 }));
 
 export default useEditModeStore;

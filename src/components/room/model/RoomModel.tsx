@@ -15,14 +15,17 @@ export default function RoomModel() {
         targetObjectId,
         reset,
         setTempPosition,
-        initTempPosition
+        initTempPosition,
+        tempCoveringMaterial,
+        initTempCoveringMaterial
     } = useEditModeStore();
     const {myFurniture} = useMyFurnitureStore();
     const  floorRef = useRef(null);
     const {scene, raycaster, camera, pointer} = useThree();
     const {wallPaperTexture, tileTexture} = useTextures(
-        myFurniture.wallpaper.path,
-        myFurniture.tile.path
+        tempCoveringMaterial.wallpaper.path,
+        tempCoveringMaterial.tile.path,
+        [tempCoveringMaterial]
     );
 
     const wallGroupRef = useRef<THREE.Group>(null);
@@ -38,8 +41,12 @@ export default function RoomModel() {
     useEffect(() => {
         if (myFurniture.furniture.length > 0) {
             initTempPosition(myFurniture.furniture);
+            initTempCoveringMaterial({
+                wallpaper: myFurniture.wallpaper,
+                tile: myFurniture.tile
+            });
         }
-    }, [myFurniture.furniture, isEditMode]);
+    }, [myFurniture.furniture, myFurniture.wallpaper, myFurniture.tile, isEditMode]);
 
     useFrame(({pointer}) => {
 

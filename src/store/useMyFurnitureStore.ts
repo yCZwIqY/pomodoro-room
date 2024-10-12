@@ -19,20 +19,25 @@ export interface FurnitureData {
     currentColors?: { [key: string]: string }
 }
 
-interface Texture {
+export interface Texture {
     id: string;
+    key: string;
     name: string;
     path: string;
     category: string;
 }
 
+export interface TempCoveringMaterial {
+    wallpaper: Texture;
+    tile: Texture;
+}
 interface FurnitureDataStore {
     myFurniture: {
         furniture: FurnitureData[];
         wallpaper: Texture;
         tile: Texture;
     };
-    updateFurnitureData: (data: FurnitureData[]) => void;
+    updateFurnitureData: (data: FurnitureData[], tempCoveringMaterials: TempCoveringMaterial) => void;
     initFurnitureData: () => void;
 
 }
@@ -42,25 +47,27 @@ const useMyFurnitureStore = create<FurnitureDataStore>((set) => ({
         furniture: [],
         wallpaper:{
             id: '',
+            key: '',
             name: '',
             path: '',
             category: '',
         },
         tile:  {
             id: '',
+            key: '',
             name: '',
             path: '',
             category: '',
         }
     },
-    updateFurnitureData: (data: FurnitureData[]) =>
+    updateFurnitureData: (data: FurnitureData[], coveringMaterials: TempCoveringMaterial) =>
         set((state) => {
             const newData = {
                 ...state,
                 myFurniture: {
-                    ...state.myFurniture,
+                    ...coveringMaterials,
                     furniture: data
-                }
+                },
             };
 
             localStorage.removeItem('myFurniture');
