@@ -35,6 +35,10 @@ const useTimer = (onCompleteRoutine: (token: number) => void) => {
       if (timeLeft <= 0) {
         clearInterval(intervalRef.current!);
         if (timeType.current === 'FOCUS') {
+          new Notification('타이머 완료!', {
+            body: '휴식을 취할 시간입니다!',
+            icon: '/pwa-64x64.png' // 알림에 표시될 아이콘
+          });
           onStartRest();
         } else if (timeType.current === 'REST') {
           currentRepeatCount.current++;
@@ -43,6 +47,10 @@ const useTimer = (onCompleteRoutine: (token: number) => void) => {
             timeType.current = 'NONE'
             onCompleteRoutine(token);
           } else {
+            new Notification('타이머 완료!', {
+              body: '집중 시작!',
+              icon: '/pwa-64x64.png' // 알림에 표시될 아이콘
+            });
             onStartFocus();
           }
         }
