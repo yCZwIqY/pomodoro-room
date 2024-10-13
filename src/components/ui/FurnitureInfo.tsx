@@ -4,6 +4,7 @@ import { DetailContainer, SummaryContainer } from '@components/style.ts';
 import Button from '@components/common/button/Button.tsx';
 import useMyBagStore from '@store/useMyBagStore.ts';
 import { useDetailSummary } from '@hooks/useDetailSummary.ts';
+import IconButton from "@components/common/button/IconButton.tsx";
 
 const FurnitureInfoContainer = styled(DetailContainer)<{
   $isOpen: boolean;
@@ -16,16 +17,18 @@ const FurnitureInfoContainer = styled(DetailContainer)<{
 
 const ColorList = styled.ul`
   list-style: none;
+  margin: 10px;
   & > li {
     display: flex;
     justify-content: space-between;
     margin: 5px 0;
+    gap: 10px;
   }
 `;
 
-const ColorInput = styled.input`
+const ColorPicker = styled.input`
   width: 30px;
-  height: 20px;
+  height: 30px;
   border: none;
   outline: none;
   border-radius: 8px;
@@ -40,9 +43,22 @@ const ColorInput = styled.input`
     border-radius: 8px;
     border: 0;
     outline: none;
-    box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.5);
   }
 `;
+
+const ColorText = styled.div`
+  flex: 1;
+  align-content: center;
+`
+const ColorInput = styled.input`
+  width: 80px;
+  outline: none;
+  border: none;
+  border-radius: 8px;
+  padding: 5px;
+  box-shadow: inset 1px 1px 2px 0 rgba(0,0,0, 0.5);
+`
 
 const FurnitureInfoSummary = styled(SummaryContainer)``;
 export default function FurnitureInfo() {
@@ -74,6 +90,17 @@ export default function FurnitureInfo() {
     });
   };
 
+  const onClickRotation = () => {
+    setTempPosition(lastClickedObject.id, {
+      ...tempPosition[lastClickedObject.id],
+      rotation: [
+        tempPosition[lastClickedObject.id].rotation[0],
+        (tempPosition[lastClickedObject.id].rotation[1] + 90) % 360,
+        tempPosition[lastClickedObject.id].rotation[2],
+      ]
+    })
+  }
+
   return (
     <>
       {isEditMode && (
@@ -87,8 +114,9 @@ export default function FurnitureInfo() {
                 <ColorList>
                   {lastClickedObject.parts.map((part) => (
                     <li key={part}>
-                      <div>{part}</div>
-                      <ColorInput
+                      <ColorText>{part}</ColorText>
+                      <ColorInput value={tempPosition[lastClickedObject.id].currentColors![part]}/>
+                      <ColorPicker
                         type={'color'}
                         value={
                           tempPosition[lastClickedObject.id].currentColors![
@@ -100,14 +128,18 @@ export default function FurnitureInfo() {
                     </li>
                   ))}
                 </ColorList>
-                <Button
-                  onClick={onPull}
-                  fullWidth
-                  size={'sm'}
-                  buttonColor={'red'}
-                >
-                  가방에 넣기
-                </Button>
+                <div style={{margin: '5px 0',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  marginTop: '10px',
+                  gap: '10px'}}>
+                  <IconButton url={'/icons/rotation.svg'}
+                              buttonColor={'blue'}
+                              onClick={onClickRotation}/>
+                  <IconButton url={'/icons/put.svg'}
+                              buttonColor={'red'}
+                              onClick={onPull}/>
+                </div>
               </>
             ) : (
               <FurnitureInfoSummary></FurnitureInfoSummary>

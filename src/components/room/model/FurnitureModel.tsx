@@ -74,7 +74,7 @@ export default function FurnitureModel({
   }, [nodes, objectRef]);
 
   const convertedRotation = () =>
-    rotation.map((it) => THREE.MathUtils.degToRad(it)) as [
+    tempPosition[data.id].rotation.map((it) => THREE.MathUtils.degToRad(it)) as [
       number,
       number,
       number
