@@ -8,7 +8,7 @@ const TokenContainer = styled.div<{ $position: 'left' | 'right' }>`
   background-color: #ffffff49;
   border-radius: 21px;
   height: 30px;
-  width: 130px;
+  width: 100px;
   display: flex;
   align-items: center;
 

@@ -15,12 +15,8 @@ const TimerContainer = styled(DetailContainer)`
   flex-direction: column;
   align-items: center;
   max-width: 45dvw;
-  min-width: 220px;
-  height: ${({ $isOpen }) => ($isOpen ? '260px' : '20px')};
-
-  @media ${({ theme }) => theme.device.tablet} {
-    height: ${({ $isOpen }) => ($isOpen ? '200px' : '20px')};
-  }
+  min-width: 100px;
+  height: ${({ $isOpen }) => ($isOpen ? 'auto' : '20px')};
 `;
 
 export default function Timer() {

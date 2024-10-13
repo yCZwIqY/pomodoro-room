@@ -13,6 +13,8 @@ const ShopNavButton = styled.ul`
   list-style: none;
   display: flex;
   gap: 5px;
+  max-width: 50dvw;
+  flex-wrap: wrap;
 `;
 
 export default function ShopNav() {
