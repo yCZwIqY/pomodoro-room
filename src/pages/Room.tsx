@@ -1,15 +1,15 @@
-import {useRef} from 'react';
-import {Canvas} from '@react-three/fiber';
-import {OrbitControls} from '@react-three/drei';
+import { useRef } from 'react';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls } from '@react-three/drei';
 import Timer from '@components/ui/timer/Timer.tsx';
 import Token from '@components/ui/Token.tsx';
 import MyBagComponent from '@components/room/MyBag.tsx';
 import useEditModeStore from '@store/useEditModeStore.ts';
 import useMyFurnitureStore from '@store/useMyFurnitureStore.ts';
-import styled, {keyframes} from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import RoomModel from '@components/room/model/RoomModel.tsx';
-import {SideNavigation} from '@components/ui/SideNavigation.tsx';
-import {useNavigate} from 'react-router-dom';
+import { SideNavigation } from '@components/ui/SideNavigation.tsx';
+import { useNavigate } from 'react-router-dom';
 import FurnitureInfo from '@components/ui/FurnitureInfo.tsx';
 import useMyBagStore from '@store/useMyBagStore.ts';
 
@@ -43,11 +43,16 @@ const RoomContainer = styled.main`
 
 export default function Room() {
   const {
-      isEditMode, targetObject, onToggleMode, setReset,
-      tempPosition, initTempPosition, tempCoveringMaterial, initTempCoveringMaterial
-  } =
-      useEditModeStore();
-    const { myFurniture, updateFurnitureData } = useMyFurnitureStore();
+    isEditMode,
+    targetObject,
+    onToggleMode,
+    setReset,
+    tempPosition,
+    initTempPosition,
+    tempCoveringMaterial,
+    initTempCoveringMaterial
+  } = useEditModeStore();
+  const { myFurniture, updateFurnitureData } = useMyFurnitureStore();
   const { saveBag, init } = useMyBagStore();
   const control = useRef(null);
   const navigator = useNavigate();
@@ -69,14 +74,14 @@ export default function Room() {
     init();
     setReset();
     initTempPosition(myFurniture.furniture);
-      initTempCoveringMaterial({
-          wallpaper: myFurniture.wallpaper,
-          tile: myFurniture.tile
-      })
+    initTempCoveringMaterial({
+      wallpaper: myFurniture.wallpaper,
+      tile: myFurniture.tile
+    });
   };
 
   const onClickSave = () => {
-      console.log(tempCoveringMaterial)
+    console.log(tempCoveringMaterial);
     updateFurnitureData(Object.values(tempPosition), tempCoveringMaterial);
     saveBag();
   };
@@ -84,7 +89,7 @@ export default function Room() {
   return (
     <RoomContainer>
       <Canvas
-          key={'room'}
+        key={'room'}
         camera={{
           zoom: 0.3,
           near: 1,
@@ -97,8 +102,8 @@ export default function Room() {
         {/*<CameraController editMode={isEditMode} />*/}
         <OrbitControls
           ref={control}
-          minAzimuthAngle={isEditMode ? -Infinity :-Math.PI / 2}
-          maxAzimuthAngle={isEditMode ?Infinity : Math.PI / 2}
+          minAzimuthAngle={isEditMode ? -Infinity : -Math.PI / 2}
+          maxAzimuthAngle={isEditMode ? Infinity : Math.PI / 2}
           minPolarAngle={isEditMode ? 0 : Math.PI / 6}
           maxPolarAngle={Math.PI / 2}
           minDistance={10}

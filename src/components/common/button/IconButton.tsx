@@ -42,7 +42,6 @@ export const IconButtonContainer = styled.button<{
         `0 5px 1px ${theme.buttonColors[$buttonColor].shadow}`};
     }
   }
-
 `;
 
 interface IconButtonProps {
@@ -69,7 +68,7 @@ export default function IconButton({
       $buttonColor={buttonColor ?? 'blue'}
       disabled={disabled}
       onClick={onClick}
-      $size={size?? '30px'}
+      $size={size ?? '30px'}
     />
   );
 }

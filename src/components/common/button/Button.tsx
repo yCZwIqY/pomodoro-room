@@ -1,31 +1,31 @@
 import styled from 'styled-components';
-import {MouseEventHandler} from 'react';
+import { MouseEventHandler } from 'react';
 
 export const ButtonContainer = styled.button<{
-    $buttonColor: ButtonColor;
-    $size: string;
-    $fullWidth?: boolean
+  $buttonColor: ButtonColor;
+  $size: string;
+  $fullWidth?: boolean;
 }>`
   background-color: ${({ theme, $buttonColor }) =>
     `${theme.buttonColors[$buttonColor].bg}`};
   box-shadow: ${({ theme, $buttonColor }) =>
     `0 5px 1px ${theme.buttonColors[$buttonColor].shadow}`};
-  font-size: ${({ theme, $size}) => theme.fontSize[$size]};
+  font-size: ${({ theme, $size }) => theme.fontSize[$size]};
   width: ${({ $fullWidth }) => $fullWidth && '100%'};
   border: 3px solid white;
   outline: none;
   display: inline-block;
   color: white;
   border-radius: 18px;
-  padding: ${({ $size}) => {
-      switch ($size) {
-          case 'sm':
-              return '8px 10px';
-          case 'lg':
-              return '13px 18px';
-          default:
-              return '10px 15px';
-      }
+  padding: ${({ $size }) => {
+    switch ($size) {
+      case 'sm':
+        return '8px 10px';
+      case 'lg':
+        return '13px 18px';
+      default:
+        return '10px 15px';
+    }
   }};
 
   &:active {
@@ -66,7 +66,7 @@ interface ButtonProps {
   buttonColor?: ButtonColor;
   fullWidth?: boolean;
   onClick?: MouseEventHandler;
-  size?: 'sm' | 'md' | 'lg'
+  size?: 'sm' | 'md' | 'lg';
 }
 
 type ButtonColor = 'red' | 'green' | 'purple' | 'yellow' | 'blue' | 'pink';
@@ -84,7 +84,7 @@ export default function Button({
       $buttonColor={buttonColor ?? 'blue'}
       disabled={disabled}
       $fullWidth={fullWidth}
-      $size={size?? 'md'}
+      $size={size ?? 'md'}
       onClick={onClick}
     >
       {children}

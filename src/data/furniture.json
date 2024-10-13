@@ -70,7 +70,15 @@
       "category": "desk",
       "position": [0, 0, 0],
       "rotation": [0, 0, 0],
-      "parts": ["desk", "side_desk", "column", "book_1", "book_2", "book_3", "book_inside"],
+      "parts": [
+        "desk",
+        "side_desk",
+        "column",
+        "book_1",
+        "book_2",
+        "book_3",
+        "book_inside"
+      ],
       "currentColors": {
         "desk": "#FFFFFF",
         "side_desk": "#FFFFFF",

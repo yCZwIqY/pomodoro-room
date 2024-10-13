@@ -1,13 +1,11 @@
 import { create } from 'zustand';
 
-
 interface TokenStore {
-    token: number;
-    initToken: () => void;
-    addToken: (num: number) => void;
-    useToken: (num: number) => void;
+  token: number;
+  initToken: () => void;
+  addToken: (num: number) => void;
+  useToken: (num: number) => void;
 }
-
 
 const useTokenStore = create<TokenStore>((set) => ({
   token: 0,

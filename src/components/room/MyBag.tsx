@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import {useEffect, useState} from 'react';
-import {gsap} from 'gsap';
+import { useEffect, useState } from 'react';
+import { gsap } from 'gsap';
 import useMyBagStore from '@store/useMyBagStore.ts';
 import MyBagItem from '@components/room/MyBagItem.tsx';
 import useEditModeStore from '@store/useEditModeStore.ts';

@@ -31,24 +31,24 @@
 
 1. 저장소를 클론합니다:
 
-    ```bash
-    git clone https://github.com/yCZwIqY/pomodoro-room.git
-    ```
+   ```bash
+   git clone https://github.com/yCZwIqY/pomodoro-room.git
+   ```
 
 2. 프로젝트 디렉토리로 이동합니다:
 
-    ```bash
-    cd pomodoro-room
-    ```
+   ```bash
+   cd pomodoro-room
+   ```
 
 3. 필요한 의존성을 설치합니다:
 
-    ```bash
-    npm install
-    ```
+   ```bash
+   npm install
+   ```
 
 4. 애플리케이션을 실행합니다:
 
-    ```bash
-    npm start
-    ```
+   ```bash
+   npm start
+   ```

@@ -1,18 +1,17 @@
-import {create} from 'zustand';
+import { create } from 'zustand';
 import furniture from '@data/furniture.json';
 import texture from '@data/texture.json';
-import {FurnitureData} from "@store/useMyFurnitureStore.ts";
+import { FurnitureData } from '@store/useMyFurnitureStore.ts';
 
 interface MyBagStore {
-    myBag: {
-        [key:string]: FurnitureData[]
-    };
-    pull: (category: string, key: string) => void;
-    put: (category: string, key: string) => void;
-    buy: (data: object) => void;
-    init: () => void;
-    saveBag: () => void;
-
+  myBag: {
+    [key: string]: FurnitureData[];
+  };
+  pull: (category: string, key: string) => void;
+  put: (category: string, key: string) => void;
+  buy: (data: object) => void;
+  init: () => void;
+  saveBag: () => void;
 }
 
 const useMyBagStore = create<MyBagStore>((set) => ({
@@ -69,7 +68,7 @@ const useMyBagStore = create<MyBagStore>((set) => ({
 
       localStorage.removeItem('myBag');
       localStorage.setItem('myBag', JSON.stringify(newData));
-      return {...state, myBag: newData};
+      return { ...state, myBag: newData };
     }),
   init: () =>
     set(() => {

@@ -59,9 +59,8 @@ const AnimationContainer = styled.div`
   animation: ${showAnimation} 0.3s linear 0.5s forwards;
 `;
 
-
 interface RotatingTokenProps {
-  scene: THREE.Scene
+  scene: THREE.Scene;
 }
 const RotatingToken = ({ scene }: RotatingTokenProps) => {
   const ref = useRef<THREE.Group>(null!);

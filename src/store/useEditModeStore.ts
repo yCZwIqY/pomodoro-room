@@ -1,29 +1,35 @@
 import { create } from 'zustand';
-import {FurnitureData, TempCoveringMaterial, Texture} from "@store/useMyFurnitureStore.ts";
+import {
+  FurnitureData,
+  TempCoveringMaterial,
+  Texture
+} from '@store/useMyFurnitureStore.ts';
 
 interface TempPosition {
-    [id: string]: FurnitureData
+  [id: string]: FurnitureData;
 }
 
 interface EditModeStore {
-    isEditMode: boolean;
-    onToggleMode: () => void;
-    lastClickedObject: FurnitureData;
-    setLastClickedObject: (id: FurnitureData | null) => void;
-    targetObject: object | null;
-    targetObjectId: string | null;
-    setTargetObject: (obj: any, id: string | null) => void;
-    reset: number;
-    setReset: () => void;
-    tempPosition: TempPosition;
-    setTempPosition: (id: string, pos: object) => void;
-    initTempPosition: (furniture: Array<{ id: string }>) => void;
-    removeTempPosition: (id: string) => void;
-    tempCoveringMaterial: TempCoveringMaterial;
-    initTempCoveringMaterial:(coveringMaterial:TempCoveringMaterial) => void;
-    setTempCoveringMaterial:(type: 'wallpaper' | 'tile', texture: Texture) => void
+  isEditMode: boolean;
+  onToggleMode: () => void;
+  lastClickedObject: FurnitureData;
+  setLastClickedObject: (id: FurnitureData | null) => void;
+  targetObject: object | null;
+  targetObjectId: string | null;
+  setTargetObject: (obj: any, id: string | null) => void;
+  reset: number;
+  setReset: () => void;
+  tempPosition: TempPosition;
+  setTempPosition: (id: string, pos: object) => void;
+  initTempPosition: (furniture: Array<{ id: string }>) => void;
+  removeTempPosition: (id: string) => void;
+  tempCoveringMaterial: TempCoveringMaterial;
+  initTempCoveringMaterial: (coveringMaterial: TempCoveringMaterial) => void;
+  setTempCoveringMaterial: (
+    type: 'wallpaper' | 'tile',
+    texture: Texture
+  ) => void;
 }
-
 
 const useEditModeStore = create<EditModeStore>((set) => ({
   isEditMode: false,
@@ -75,21 +81,22 @@ const useEditModeStore = create<EditModeStore>((set) => ({
         tempPosition: { ...state.tempPosition }
       };
     }),
-    tempCoveringMaterial: {
-        wallpaper: '',
-        tile: ''
-    },
-    initTempCoveringMaterial: (coveringMaterial) =>
-        set((state) => ({
-            ...state,
-            tempCoveringMaterial: coveringMaterial
-        })),
-    setTempCoveringMaterial: (category, texture) => set((state) => ({
-        ...state,
-        tempCoveringMaterial: {
-            ...state.tempCoveringMaterial,
-            [category]: texture
-        }
+  tempCoveringMaterial: {
+    wallpaper: '',
+    tile: ''
+  },
+  initTempCoveringMaterial: (coveringMaterial) =>
+    set((state) => ({
+      ...state,
+      tempCoveringMaterial: coveringMaterial
+    })),
+  setTempCoveringMaterial: (category, texture) =>
+    set((state) => ({
+      ...state,
+      tempCoveringMaterial: {
+        ...state.tempCoveringMaterial,
+        [category]: texture
+      }
     }))
 }));
 

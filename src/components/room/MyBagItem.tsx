@@ -1,11 +1,12 @@
-import useMyFurnitureStore, {FurnitureData} from '@store/useMyFurnitureStore.ts';
-import {Canvas} from '@react-three/fiber';
-import {useMemo} from 'react';
+import useMyFurnitureStore, {
+  FurnitureData
+} from '@store/useMyFurnitureStore.ts';
+import { Canvas } from '@react-three/fiber';
+import { useMemo } from 'react';
 import styled from 'styled-components';
 import FurnitureModelViewer from '@components/room/model/FurnitureModelViewer.tsx';
 import useMyBagStore from '@store/useMyBagStore.ts';
 import useEditModeStore from '@store/useEditModeStore.ts';
-
 
 interface IsZero {
   $isZero: boolean;
@@ -48,8 +49,9 @@ interface MyBagItemProps {
 
 export default function MyBagItem({ data }: MyBagItemProps) {
   const { pull, put } = useMyBagStore();
-  const {myFurniture} = useMyFurnitureStore();
-  const { setTempPosition, tempCoveringMaterial, setTempCoveringMaterial } = useEditModeStore();
+  const { myFurniture } = useMyFurnitureStore();
+  const { setTempPosition, tempCoveringMaterial, setTempCoveringMaterial } =
+    useEditModeStore();
   const isTexture = useMemo<boolean>(
     () => ['wallpaper', 'tile'].includes(data.category),
     [data]
@@ -71,7 +73,7 @@ export default function MyBagItem({ data }: MyBagItemProps) {
     setTempPosition(id, {
       ...data,
       position: [0, 0, 0],
-      rotation: [0, 0, 0],
+      rotation: [0, 0, 0]
     });
 
     pull(data.category, data.key);
@@ -79,23 +81,23 @@ export default function MyBagItem({ data }: MyBagItemProps) {
   };
 
   const onCoveringMaterialClick = () => {
-    const category = data.category as 'tile' | 'wallpaper'
+    const category = data.category as 'tile' | 'wallpaper';
 
-    console.log(category, tempCoveringMaterial)
-    put(category, tempCoveringMaterial[category].key)
+    console.log(category, tempCoveringMaterial);
+    put(category, tempCoveringMaterial[category].key);
     pull(data.category, data.key);
     setTempCoveringMaterial(category, data);
-
-  }
+  };
 
   return (
     <MyBagItemContainer $isZero={isZero}>
       {isTexture ? (
         <MyBagItemTextureImg
-            $isZero={isZero}
-            onClick={onCoveringMaterialClick}
-            src={getPath()}
-            alt={data.name} />
+          $isZero={isZero}
+          onClick={onCoveringMaterialClick}
+          src={getPath()}
+          alt={data.name}
+        />
       ) : (
         <Canvas
           onClick={onFurnitureClick}
