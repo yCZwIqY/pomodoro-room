@@ -1,128 +1,93 @@
-import { useState, useRef, useCallback } from 'react';
+import {useCallback, useRef, useState} from 'react';
 
 export interface TimerFormData {
-  focusTime: number;
-  restTime: number;
-  repeatCount: number;
+    focusTime: number;
+    restTime: number;
+    repeatCount: number;
 }
 
-type TimeType = 'NONE' | 'FOCUS' | 'REST';
-
 const useTimer = (onCompleteRoutine: (token: number) => void) => {
-  const timeType = useRef<TimeType>('NONE');
-  const [isPaused, setIsPaused] = useState(false);
-  const [remainingTime, setRemainingTime] = useState(0);
+    // const timeType = useRef<TimeType>('NONE');
+    const [timeType, setTimeType] = useState('NONE');
+    const [isPaused, setIsPaused] = useState(false);
+    const [remainingTime, setRemainingTime] = useState(0);
 
-  const focusTime = useRef(0);
-  const restTime = useRef(0);
-  const repeatCount = useRef(0);
-  const currentRepeatCount = useRef(0);
-  const intervalRef = useRef<number>(0);
-  const startTimeRef = useRef<number>(0);
-  const endTimeRef = useRef<number>(0);
+    const focusTime = useRef(0);
+    const repeatCount = useRef(0);
+    const currentRepeatCount = useRef(0);
 
-  const getToken = useCallback(() => {
-    const baseToken = 2;
-    const focusTimeBonus = 0.05 * focusTime.current;
-    const repeatBonus = 2 * repeatCount.current;
-    return Math.floor(baseToken + focusTimeBonus + repeatBonus);
-  }, []);
+    const getToken = useCallback(() => {
+        const baseToken = 2;
+        const focusTimeBonus = 0.05 * focusTime.current;
+        const repeatBonus = 2 * repeatCount.current;
+        return Math.floor(baseToken + focusTimeBonus + repeatBonus);
+    }, []);
 
-  const startTimer = useCallback(() => {
-    intervalRef.current = setInterval(() => {
-      const now = Date.now();
-      const timeLeft = Math.round((endTimeRef.current - now) / 1000);
-      if (timeLeft <= 0) {
-        clearInterval(intervalRef.current!);
-        if (timeType.current === 'FOCUS') {
-          new Notification('타이머 완료!', {
-            body: '휴식을 취할 시간입니다!',
-            icon: '/pwa-64x64.png' // 알림에 표시될 아이콘
-          });
-          onStartRest();
-        } else if (timeType.current === 'REST') {
-          currentRepeatCount.current++;
-          if (currentRepeatCount.current >= repeatCount.current) {
-            const token = getToken();
-            timeType.current = 'NONE'
-            onCompleteRoutine(token);
-          } else {
-            new Notification('타이머 완료!', {
-              body: '집중 시작!',
-              icon: '/pwa-64x64.png' // 알림에 표시될 아이콘
+    const onStartTimer = (data: TimerFormData) => {
+
+
+        if (navigator.serviceWorker.controller) {
+            setRemainingTime(data.focusTime * 60)
+            navigator.serviceWorker.controller.postMessage({
+                type: 'START_TIMER',
+                data
             });
-            onStartFocus();
-          }
         }
-      } else {
-        setRemainingTime(timeLeft);
-      }
-    }, 1000);
-  }, [timeType.current, onCompleteRoutine, getToken]);
 
-  const onStartTimer = useCallback((data: TimerFormData) => {
-    focusTime.current = data.focusTime;
-    restTime.current = data.restTime;
-    repeatCount.current = data.repeatCount;
-    currentRepeatCount.current = 0;
-    onStartFocus();
-  }, []);
 
-  const onStartFocus = useCallback(() => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
+        const baseToken = 2;
+        const focusTimeBonus = 0.05 * focusTime;
+        const repeatBonus = 2 * repeatCount;
+        const token = Math.floor(baseToken + focusTimeBonus + repeatBonus);
+
+        navigator.serviceWorker.onmessage = ({data}) => {
+            switch (data.timeType) {
+                case 'FOCUS':
+                    setTimeType('FOCUS');
+                    break;
+                case 'REST':
+                    setTimeType('REST');
+                    break;
+                case 'INTERVAL':
+                    setRemainingTime(data.time);
+                    break;
+                case 'COMPLETE':
+                    onCompleteRoutine(token);
+                    break;
+                default:
+                    break;
+            }
+        }
+
     }
-    timeType.current = 'FOCUS';
-    const duration = focusTime.current * 60;
-    startTimeRef.current = Date.now();
-    endTimeRef.current = startTimeRef.current + duration * 1000;
-    setRemainingTime(duration);
-    startTimer();
-  }, [startTimer]);
 
-  const onStartRest = useCallback(() => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
+
+    const onPauseResume = () => {
+        setIsPaused(!isPaused);
+        navigator.serviceWorker.controller.postMessage({
+            type: 'PAUSE_TIMER',
+        });
     }
-    timeType.current = 'REST';
-    const duration = restTime.current * 60;
-    startTimeRef.current = Date.now();
-    endTimeRef.current = startTimeRef.current + duration * 1000;
-    setRemainingTime(duration);
-    startTimer();
-  }, [startTimer]);
 
-  const onPauseResume = useCallback(() => {
-    if (isPaused) {
-      const now = Date.now();
-      const timeLeft = Math.round((endTimeRef.current - now) / 1000);
-      endTimeRef.current = now + timeLeft * 1000;
-      setIsPaused(false);
-      startTimer();
-    } else {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-      setIsPaused(true);
+    const onStop = () => {
+        setTimeType('NONE');
+        setIsPaused(false);
+        setRemainingTime(0);
+        navigator.serviceWorker.controller.postMessage({
+            type: 'STOP_TIMER',
+        });
     }
-  }, [isPaused, startTimer]);
 
-  const onStop = useCallback(() => {
-    clearInterval(intervalRef.current);
-    intervalRef.current = 0;
-    timeType.current = 'NONE'
-  }, []);
-
-  return {
-    timeType: timeType.current,
-    isPaused,
-    remainingTime,
-    currentRepeatCount: currentRepeatCount.current,
-    onStartTimer,
-    onPauseResume,
-    onStop,
-    getToken
-  };
+    return {
+        timeType,
+        isPaused,
+        remainingTime,
+        currentRepeatCount: currentRepeatCount.current,
+        onStartTimer,
+        onPauseResume,
+        onStop,
+        getToken
+    };
 };
 
 export default useTimer;
