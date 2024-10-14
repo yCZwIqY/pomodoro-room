@@ -24,13 +24,16 @@ const useTimer = (onCompleteRoutine: (token: number) => void) => {
   }, []);
 
   const onStartTimer = (data: TimerFormData) => {
-    if (navigator.serviceWorker.controller) {
-      setRemainingTime(data.focusTime * 60);
-      navigator.serviceWorker.controller.postMessage({
-        type: 'START_TIMER',
-        data
-      });
+    console.log(navigator.serviceWorker.controller)
+    if (!navigator.serviceWorker.controller) {
+      navigator.serviceWorker.register('/service-worker.js')
     }
+
+    setRemainingTime(data.focusTime * 60);
+    navigator.serviceWorker.controller.postMessage({
+      type: 'START_TIMER',
+      data
+    });
 
     const baseToken = 2;
     const focusTimeBonus = 0.05 * focusTime;

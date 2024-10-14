@@ -1,11 +1,9 @@
 import useEditModeStore from '@store/useEditModeStore.ts';
 import styled from 'styled-components';
-import { DetailContainer, SummaryContainer } from '@components/style.ts';
-import Button from '@components/common/button/Button.tsx';
+import {DetailContainer, SummaryContainer} from '@components/style.ts';
 import useMyBagStore from '@store/useMyBagStore.ts';
-import { useDetailSummary } from '@hooks/useDetailSummary.ts';
+import {useDetailSummary} from '@hooks/useDetailSummary.ts';
 import IconButton from "@components/common/button/IconButton.tsx";
-import {useState} from "react";
 
 const FurnitureInfoContainer = styled(DetailContainer)<{
   $isOpen: boolean;

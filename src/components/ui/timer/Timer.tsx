@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import {useCallback, useRef} from 'react';
 import TimerForm from '@components/ui/timer/TimerForm.tsx';
 import RoutineCompleteDialog from '@components/ui/timer/RoutineCompleteDialog.tsx';
 import useTokenStore from '@store/useTokenStore.tsx';
@@ -7,15 +7,15 @@ import styled from 'styled-components';
 import TimerControls from '@components/ui/timer/TimerControls.tsx';
 import TimerDisplay from '@components/ui/timer/TimeDiaplay.tsx';
 import useEditModeStore from '@store/useEditModeStore.ts';
-import { DetailContainer, SummaryContainer } from '@components/style.ts';
-import { useDetailSummary } from '@hooks/useDetailSummary.ts';
+import {DetailContainer, SummaryContainer} from '@components/style.ts';
+import {useDetailSummary} from '@hooks/useDetailSummary.ts';
 
 const TimerContainer = styled(DetailContainer)`
   display: ${({ $display }) => ($display ? 'none' : 'flex')};
   flex-direction: column;
   align-items: center;
-  max-width: 45dvw;
-  min-width: 100px;
+  max-width: 55dvw;
+  min-width: 150px;
   height: ${({ $isOpen }) => ($isOpen ? 'auto' : '20px')};
 `;
 
