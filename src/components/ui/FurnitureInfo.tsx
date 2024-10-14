@@ -5,6 +5,7 @@ import Button from '@components/common/button/Button.tsx';
 import useMyBagStore from '@store/useMyBagStore.ts';
 import { useDetailSummary } from '@hooks/useDetailSummary.ts';
 import IconButton from "@components/common/button/IconButton.tsx";
+import {useState} from "react";
 
 const FurnitureInfoContainer = styled(DetailContainer)<{
   $isOpen: boolean;
@@ -115,7 +116,10 @@ export default function FurnitureInfo() {
                   {lastClickedObject.parts.map((part) => (
                     <li key={part}>
                       <ColorText>{part}</ColorText>
-                      <ColorInput value={tempPosition[lastClickedObject.id].currentColors![part]}/>
+                      <ColorInput
+                          value={tempPosition[lastClickedObject.id].currentColors![part]}
+                          onChange={e => onColorChange(part, e.target.value)}
+                      />
                       <ColorPicker
                         type={'color'}
                         value={
