@@ -24,7 +24,7 @@ const useTimer = (onCompleteRoutine: (token: number) => void) => {
   }, []);
 
   const onStartTimer = (data: TimerFormData) => {
-    console.log(navigator.serviceWorker.controller)
+    console.log(navigator.serviceWorker)
     if (!navigator.serviceWorker.controller) {
       navigator.serviceWorker.register('/service-worker.js')
     }
