@@ -47,7 +47,7 @@ const onStartTimer = () => {
       currentTime = 0;
       if (timeType === 'FOCUS') {
         onStartRest();
-      } else if (repeatCount === currentRepeat) {
+      } else if (repeatCount === currentRepeat + 1) {
         onComplete();
       } else {
         currentRepeat++;
@@ -59,12 +59,12 @@ const onStartTimer = () => {
 
 const onStartFocus = () => {
   timeType = 'FOCUS';
-  self.postMessage({ type: 'FOCUS' });
+  self.postMessage({ type: 'FOCUS', time: focusTime * 60, repeat: currentRepeat });
 };
 
 const onStartRest = () => {
   timeType = 'REST';
-  self.postMessage({ type: 'REST' });
+  self.postMessage({ type: 'REST', time: restTime * 60, repeat: currentRepeat });
 };
 
 const onPause = () => {
@@ -91,9 +91,9 @@ const onResetTimer = () => {
   timeType = 'NONE';
   timer = 0;
   currentTime = 0;
-  currentRepeat = 1;
+  currentRepeat = 0;
   isPause = false;
   focusTime = 0;
   restTime = 0;
-  repeatCount = 0;
+  repeatCount = 1;
 };
