@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState, useEffect } from 'react';
 
 export interface TimerFormData {
   focusTime: number;
@@ -7,7 +7,6 @@ export interface TimerFormData {
 }
 
 const useTimer = (onCompleteRoutine: (token: number) => void) => {
-  // const timeType = useRef<TimeType>('NONE');
   const [timeType, setTimeType] = useState('NONE');
   const [isPaused, setIsPaused] = useState(false);
   const [remainingTime, setRemainingTime] = useState(0);
@@ -15,6 +14,35 @@ const useTimer = (onCompleteRoutine: (token: number) => void) => {
   const focusTime = useRef(0);
   const repeatCount = useRef(0);
   const currentRepeatCount = useRef(0);
+  const workerRef = useRef<Worker | null>(null);
+
+  useEffect(() => {
+    workerRef.current = new Worker('/timer-worker.js');
+
+    workerRef.current.onmessage = ({ data }) => {
+      switch (data.type) {
+        case 'FOCUS':
+          setTimeType('FOCUS');
+          break;
+        case 'REST':
+          setTimeType('REST');
+          break;
+        case 'INTERVAL':
+          setRemainingTime(data.time);
+          currentRepeatCount.current = data.repeat;
+          break;
+        case 'COMPLETE':
+          onCompleteRoutine(getToken());
+          break;
+        default:
+          break;
+      }
+    };
+
+    return () => {
+      workerRef.current?.terminate();
+    };
+  }, []);
 
   const getToken = useCallback(() => {
     const baseToken = 2;
@@ -24,45 +52,28 @@ const useTimer = (onCompleteRoutine: (token: number) => void) => {
   }, []);
 
   const onStartTimer = (data: TimerFormData) => {
-    console.log(navigator.serviceWorker)
-    if (!navigator.serviceWorker.controller) {
-      navigator.serviceWorker.register('/service-worker.js')
-    }
-
     setRemainingTime(data.focusTime * 60);
-    navigator.serviceWorker.controller.postMessage({
+    focusTime.current = data.focusTime;
+    repeatCount.current = data.repeatCount;
+
+    workerRef.current?.postMessage({
       type: 'START_TIMER',
       data
     });
 
-    const baseToken = 2;
-    const focusTimeBonus = 0.05 * focusTime;
-    const repeatBonus = 2 * repeatCount;
-    const token = Math.floor(baseToken + focusTimeBonus + repeatBonus);
-
-    navigator.serviceWorker.onmessage = ({ data }) => {
-      switch (data.timeType) {
-        case 'FOCUS':
-          setTimeType('FOCUS');
-          break;
-        case 'REST':
-          setTimeType('REST');
-          break;
-        case 'INTERVAL':
-          setRemainingTime(data.time);
-          break;
-        case 'COMPLETE':
-          onCompleteRoutine(token);
-          break;
-        default:
-          break;
-      }
-    };
+    // 서비스 워커를 통해 알림 표시
+    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({
+        type: 'SHOW_NOTIFICATION',
+        message: '타이머 진행 중',
+        body: '루틴이 진행 중입니다.'
+      });
+    }
   };
 
   const onPauseResume = () => {
     setIsPaused(!isPaused);
-    navigator.serviceWorker.controller.postMessage({
+    workerRef.current?.postMessage({
       type: 'PAUSE_TIMER'
     });
   };
@@ -71,7 +82,7 @@ const useTimer = (onCompleteRoutine: (token: number) => void) => {
     setTimeType('NONE');
     setIsPaused(false);
     setRemainingTime(0);
-    navigator.serviceWorker.controller.postMessage({
+    workerRef.current?.postMessage({
       type: 'STOP_TIMER'
     });
   };
