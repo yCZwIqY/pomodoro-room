@@ -1,24 +1,3 @@
-self.addEventListener('activate', function(event) {
-  event.waitUntil(
-      caches.keys().then(function(cacheNames) {
-        return Promise.all(
-            cacheNames.map(function(cacheName) {
-              return caches.delete(cacheName);
-            })
-        );
-      })
-  );
-});
-
-self.addEventListener('install', function(event) {
-  event.waitUntil(self.skipWaiting()); // Activate worker immediately
-});
-
-self.addEventListener('activate', function(event) {
-  event.waitUntil(self.clients.claim()); // Become available to all pages
-});
-
-
 let timeType = 'NONE';
 let timer = 0;
 let currentTime = 0;
@@ -52,6 +31,18 @@ self.onmessage = ({ data }) => {
 };
 
 const onStartTimer = () => {
+  self.addEventListener('sync', (event) => {
+    if (event.tag === 'sync-timer') {
+      event.waitUntil(onStartTimer());
+    }
+  });
+
+  self.registration.showNotification('타이머 진행 중', {
+    body: '루틴이 진행 중입니다.',
+    icon: '/pwa-64x64.png',
+    requireInteraction: true // 사용자가 직접 알림을 닫기 전까지 유지
+  });
+
   timer = setInterval(() => {
     currentTime++;
     const displayTime =
