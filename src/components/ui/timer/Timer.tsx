@@ -21,21 +21,9 @@ const TimerContainer = styled(DetailContainer)`
 
 export default function Timer() {
   const { isEditMode } = useEditModeStore();
-  const { addToken } = useTokenStore();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [isOpen, onToggle] = useDetailSummary();
-  const onCompleteRoutine = useCallback(
-    (token: number) => {
-      new Notification('타이머 완료!', {
-        body: 'Pomodoro 세션이 끝났습니다.',
-        icon: '/pwa-64x64.png' // 알림에 표시될 아이콘
-      });
-
-      addToken(token);
-      dialogRef.current?.showModal();
-    },
-    [addToken]
-  );
+  const onCompleteRoutine = () =>  dialogRef.current?.showModal();
 
   const {
     timeType,

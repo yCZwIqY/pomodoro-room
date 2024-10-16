@@ -1,4 +1,5 @@
 import { useCallback, useRef, useState, useEffect } from 'react';
+import useTokenStore from "@store/useTokenStore.tsx";
 
 export interface TimerFormData {
   focusTime: number;
@@ -6,7 +7,7 @@ export interface TimerFormData {
   repeatCount: number;
 }
 
-const useTimer = (onCompleteRoutine: (token: number) => void) => {
+const useTimer = (onCompleteRoutine: () => void) => {
   const [timeType, setTimeType] = useState('NONE');
   const [isPaused, setIsPaused] = useState(false);
   const [remainingTime, setRemainingTime] = useState(0);
@@ -15,6 +16,8 @@ const useTimer = (onCompleteRoutine: (token: number) => void) => {
   const repeatCount = useRef(0);
   const currentRepeatCount = useRef(0);
   const workerRef = useRef<Worker | null>(null);
+
+  const { addToken } = useTokenStore();
 
   useEffect(() => {
     workerRef.current = new Worker('/timer-worker.js');
@@ -41,15 +44,13 @@ const useTimer = (onCompleteRoutine: (token: number) => void) => {
         case 'COMPLETE':
           onPostMessage('루틴 완료', '모든 루틴을 완료하셨습니다. 수고하셨어요!')
           setTimeType('NONE');
-          onCompleteRoutine(getToken());
+          onCompleteRoutine();
+          addToken(getToken());
+          workerRef.current?.terminate();
           break;
         default:
           break;
       }
-    };
-
-    return () => {
-      workerRef.current?.terminate();
     };
   }, []);
 
