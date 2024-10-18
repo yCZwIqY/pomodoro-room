@@ -1,8 +1,36 @@
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SHOW_NOTIFICATION') {
+    self.registration.showNotification(event.data.message, {
+      body: event.data.body,
+      icon: '/pwa-64x64.png',
+      requireInteraction: true
+    });
+  }
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+});
+
+self.addEventListener('periodicsync', event => {
+  if (event.tag === 'timer-sync') {
+    event.waitUntil(syncTimer());
+  }
+});
+
+async function syncTimer() {
+  const clients = await self.clients.matchAll();
+  clients.forEach(client => {
+    client.postMessage({ type: 'SYNC_TIMER' });
+  });
+}
+
 let timeType = 'NONE';
-let timer = 0;
-let currentTime = 0;
+let startTime = 0;
+let pausedTime = 0;
 let currentRepeat = 1;
-let isPause = false;
+let remainingTime = 0;
+let isPaused = false;
 
 let focusTime = 0;
 let restTime = 0;
@@ -25,56 +53,76 @@ self.onmessage = ({ data }) => {
     case 'STOP_TIMER':
       onStop();
       return;
+    case 'GET_STATE':
+      self.postMessage({
+        type: timeType,
+        time: remainingTime,
+        repeat: currentRepeat
+      });
+      return;
     default:
       return;
   }
 };
 
 const onStartTimer = () => {
-  timer = setInterval(() => {
-    currentTime++;
-    const displayTime =
-        (timeType === 'FOCUS' ? focusTime : restTime) * 60 - currentTime;
+  startTime = Date.now() - pausedTime;
+  updateTimer();
+};
 
-    self.postMessage({
-      type: 'INTERVAL',
-      time: displayTime,
-      repeat: currentRepeat,
-      timeType
-    });
+const updateTimer = () => {
+  if (isPaused) return;
 
-    if (displayTime === 0) {
-      currentTime = 0;
-      if (timeType === 'FOCUS') {
-        onStartRest();
-      } else if (repeatCount === currentRepeat + 1) {
-        onComplete();
-      } else {
-        currentRepeat++;
-        onStartFocus();
-      }
+  const currentTime = Date.now();
+  const elapsedTime = Math.floor((currentTime - startTime) / 1000);
+  const totalTime = (timeType === 'FOCUS' ? focusTime : restTime) * 60;
+  remainingTime = totalTime - elapsedTime;
+
+  self.postMessage({
+    type: 'INTERVAL',
+    time: remainingTime,
+    repeat: currentRepeat,
+    timeType
+  });
+
+  if (remainingTime <= 0) {
+    if (timeType === 'FOCUS') {
+      onStartRest();
+    } else if (repeatCount === currentRepeat + 1) {
+      onComplete();
+    } else {
+      currentRepeat++;
+      onStartFocus();
     }
-  }, 1000);
+  } else {
+    setTimeout(updateTimer, 100);  // 더 부드러운 업데이트를 위해 100ms 간격으로 설정
+  }
 };
 
 const onStartFocus = () => {
   timeType = 'FOCUS';
+  startTime = Date.now();
+  pausedTime = 0;
   self.postMessage({ type: 'FOCUS', time: focusTime * 60, repeat: currentRepeat });
+  updateTimer();
 };
 
 const onStartRest = () => {
   timeType = 'REST';
+  startTime = Date.now();
+  pausedTime = 0;
   self.postMessage({ type: 'REST', time: restTime * 60, repeat: currentRepeat });
+  updateTimer();
 };
 
 const onPause = () => {
-  if (isPause) {
-    onStartTimer();
+  if (isPaused) {
+    startTime = Date.now() - pausedTime;
+    updateTimer();
   } else {
-    clearInterval(timer);
+    pausedTime = Date.now() - startTime;
   }
-
-  isPause = !isPause;
+  isPaused = !isPaused;
 };
 
 const onStop = () => {
@@ -87,13 +135,13 @@ const onComplete = () => {
 };
 
 const onResetTimer = () => {
-  clearInterval(timer);
   timeType = 'NONE';
-  timer = 0;
-  currentTime = 0;
+  startTime = 0;
+  pausedTime = 0;
   currentRepeat = 0;
-  isPause = false;
+  isPaused = false;
   focusTime = 0;
   restTime = 0;
   repeatCount = 1;
+  remainingTime = 0;
 };
