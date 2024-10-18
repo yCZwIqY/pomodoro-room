@@ -22,18 +22,17 @@ function App() {
       init();
       initFurnitureData();
     }
-
+    
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.getRegistrations()
-            .then((registrations) => {
-              registrations.forEach((registration) => {
-                registration.unregister();
-              });
-              navigator.serviceWorker.register('/service-worker.js')
-            });
+      navigator.serviceWorker.getRegistration().then((registration) => {
+        if (registration) {
+          registration.update();
+        } else {
+          navigator.serviceWorker.register('/service-worker.js');
+        }
       });
     }
+
 
     return () => {
       effectRan.current = true;

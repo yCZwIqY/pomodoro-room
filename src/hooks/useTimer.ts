@@ -1,14 +1,3 @@
-import { useCallback, useRef, useState, useEffect } from 'react';
-import useTokenStore from "@store/useTokenStore.tsx";
-
-let wakeLock: WakeLockSentinel | null = null;
-
-export interface TimerFormData {
-  focusTime: number;
-  restTime: number;
-  repeatCount: number;
-}
-
 const useTimer = (onCompleteRoutine: () => void) => {
   const [timeType, setTimeType] = useState('NONE');
   const [isPaused, setIsPaused] = useState(false);
@@ -16,7 +5,7 @@ const useTimer = (onCompleteRoutine: () => void) => {
 
   const focusTime = useRef(0);
   const repeatCount = useRef(0);
-  const currentRepeatCount = useRef(0);
+  const currentRepeatCount = useRef(1);
   const workerRef = useRef<Worker | null>(null);
 
   const { addToken } = useTokenStore();
@@ -27,14 +16,12 @@ const useTimer = (onCompleteRoutine: () => void) => {
     workerRef.current.onmessage = ({ data }) => {
       switch (data.type) {
         case 'FOCUS':
-          requestWakeLock();
           onPostMessage('집중 시작', '집중할 시간입니다.');
           setTimeType('FOCUS');
           setRemainingTime(data.time);
           currentRepeatCount.current = data.repeat;
           break;
         case 'REST':
-          requestWakeLock();
           onPostMessage('휴식 시작', '휴식을 취할 시간입니다.');
           setTimeType('REST');
           setRemainingTime(data.time);
@@ -45,7 +32,6 @@ const useTimer = (onCompleteRoutine: () => void) => {
           currentRepeatCount.current = data.repeat;
           break;
         case 'COMPLETE':
-          releaseWakeLock();
           onPostMessage('루틴 완료', '모든 루틴을 완료하셨습니다. 수고하셨어요!');
           setTimeType('NONE');
           onCompleteRoutine();
@@ -58,7 +44,6 @@ const useTimer = (onCompleteRoutine: () => void) => {
     };
 
     return () => {
-      releaseWakeLock();
       workerRef.current?.terminate();
     };
   }, []);
@@ -71,7 +56,6 @@ const useTimer = (onCompleteRoutine: () => void) => {
   }, []);
 
   const onStartTimer = (data: TimerFormData) => {
-    setRemainingTime(0.1 * 60);
     focusTime.current = data.focusTime;
     repeatCount.current = data.repeatCount;
 
@@ -80,14 +64,13 @@ const useTimer = (onCompleteRoutine: () => void) => {
       data
     });
 
-    // 서비스 워커를 통해 알림 표시
     if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
       onPostMessage('루틴 시작', '뽀모도로 루틴을 시작합니다!');
     }
   };
 
-  const onPostMessage = (title: string, body: string) => {
-    navigator.serviceWorker.controller?.postMessage({
+  const onPostMessage = (title, body) => {
+    navigator.serviceWorker.controller.postMessage({
       type: 'SHOW_NOTIFICATION',
       message: title,
       body: body
@@ -102,40 +85,12 @@ const useTimer = (onCompleteRoutine: () => void) => {
   };
 
   const onStop = () => {
-    releaseWakeLock();
     setTimeType('NONE');
     setIsPaused(false);
     setRemainingTime(0);
     workerRef.current?.postMessage({
       type: 'STOP_TIMER'
     });
-  };
-  
-  const requestWakeLock = async () => {
-    try {
-      if (!wakeLock) {
-        wakeLock = await navigator.wakeLock.request('screen');
-        wakeLock.addEventListener('release', () => {
-          console.log('Wake Lock was released');
-        });
-        console.log('Wake Lock is active');
-      }
-    } catch (err) {
-      console.error(`${err.name}, ${err.message}`);
-    }
-  };
-
-
-  const releaseWakeLock = async () => {
-    try {
-      if (wakeLock) {
-        await wakeLock.release();
-        wakeLock = null;
-        console.log('Wake Lock has been released');
-      }
-    } catch (err) {
-      console.error(`${err.name}, ${err.message}`);
-    }
   };
 
   return {
@@ -149,5 +104,3 @@ const useTimer = (onCompleteRoutine: () => void) => {
     getToken
   };
 };
-
-export default useTimer;

@@ -1,8 +1,8 @@
 let timeType = 'NONE';
 let startTime = 0;
+let endTime = 0;
 let currentRepeat = 1;
-let isPause = false;
-let pausedTime = 0;
+let isPaused = false;
 
 let focusTime = 0;
 let restTime = 0;
@@ -11,99 +11,91 @@ let repeatCount = 0;
 self.onmessage = ({ data }) => {
   switch (data.type) {
     case 'START_TIMER':
-      onResetTimer();
-      focusTime = data.data.focusTime;
-      restTime = data.data.restTime;
+      focusTime = data.data.focusTime * 60;
+      restTime = data.data.restTime * 60;
       repeatCount = data.data.repeatCount;
-
-      onStartFocus();
+      startFocusTimer();
       return;
     case 'PAUSE_TIMER':
-      onPause();
+      togglePause();
       return;
     case 'STOP_TIMER':
-      onStop();
+      stopTimer();
       return;
     default:
       return;
   }
 };
 
-const calculateRemainingTime = (totalTimeInSeconds) => {
-  const now = Date.now();
-  const elapsed = Math.floor((now - startTime) / 1000);
-  return totalTimeInSeconds - elapsed;
-};
-
-const onStartFocus = () => {
+const startFocusTimer = () => {
   timeType = 'FOCUS';
   startTime = Date.now();
-  self.postMessage({ type: 'FOCUS', time: focusTime * 60, repeat: currentRepeat });
-  onUpdateTimer(focusTime * 60);
+  endTime = startTime + focusTime * 1000;
+  postTimeUpdate();
 };
 
-const onStartRest = () => {
+const startRestTimer = () => {
   timeType = 'REST';
   startTime = Date.now();
-  self.postMessage({ type: 'REST', time: restTime * 60, repeat: currentRepeat });
-  onUpdateTimer(restTime * 60);
+  endTime = startTime + restTime * 1000;
+  postTimeUpdate();
 };
 
-const onUpdateTimer = (totalTime) => {
+const postTimeUpdate = () => {
   const interval = setInterval(() => {
-    const remainingTime = calculateRemainingTime(totalTime);
+    if (isPaused) return;
 
-    if (isPause) {
-      clearInterval(interval);
-      return;
-    }
+    const currentTime = Date.now();
+    const remainingTime = Math.max(0, Math.floor((endTime - currentTime) / 1000));
 
     self.postMessage({
       type: 'INTERVAL',
       time: remainingTime,
       repeat: currentRepeat,
-      timeType
+      timeType,
     });
 
     if (remainingTime <= 0) {
       clearInterval(interval);
+
       if (timeType === 'FOCUS') {
-        onStartRest();
-      } else if (repeatCount === currentRepeat + 1) {
-        onComplete();
-      } else {
-        currentRepeat++;
-        onStartFocus();
+        if (currentRepeat < repeatCount) {
+          currentRepeat++;
+          startRestTimer();
+        } else {
+          completeRoutine();
+        }
+      } else if (timeType === 'REST') {
+        startFocusTimer();
       }
     }
   }, 1000);
 };
 
-const onPause = () => {
-  if (isPause) {
-    const now = Date.now();
-    startTime += now - pausedTime;
-  } else {
-    pausedTime = Date.now();
-  }
-  isPause = !isPause;
-};
-
-const onStop = () => {
-  onResetTimer();
-};
-
-const onComplete = () => {
+const completeRoutine = () => {
   self.postMessage({ type: 'COMPLETE' });
-  onResetTimer();
+  resetTimer();
 };
 
-const onResetTimer = () => {
+const resetTimer = () => {
   timeType = 'NONE';
   startTime = 0;
-  currentRepeat = 0;
-  isPause = false;
-  focusTime = 0;
-  restTime = 0;
-  repeatCount = 1;
+  endTime = 0;
+  currentRepeat = 1;
+  isPaused = false;
+};
+
+const togglePause = () => {
+  isPaused = !isPaused;
+
+  if (!isPaused) {
+    const remainingTime = endTime - Date.now();
+    startTime = Date.now();
+    endTime = startTime + remainingTime;
+    postTimeUpdate();
+  }
+};
+
+const stopTimer = () => {
+  resetTimer();
 };
