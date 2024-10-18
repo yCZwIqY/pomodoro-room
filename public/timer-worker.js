@@ -1,8 +1,8 @@
 let timeType = 'NONE';
-let timer = 0;
-let currentTime = 0;
+let startTime = 0;
 let currentRepeat = 1;
 let isPause = false;
+let pausedTime = 0;
 
 let focusTime = 0;
 let restTime = 0;
@@ -17,7 +17,6 @@ self.onmessage = ({ data }) => {
       repeatCount = data.data.repeatCount;
 
       onStartFocus();
-      onStartTimer();
       return;
     case 'PAUSE_TIMER':
       onPause();
@@ -30,21 +29,44 @@ self.onmessage = ({ data }) => {
   }
 };
 
-const onStartTimer = () => {
-  timer = setInterval(() => {
-    currentTime++;
-    const displayTime =
-        (timeType === 'FOCUS' ? focusTime : restTime) * 60 - currentTime;
+const calculateRemainingTime = (totalTimeInSeconds) => {
+  const now = Date.now();
+  const elapsed = Math.floor((now - startTime) / 1000);
+  return totalTimeInSeconds - elapsed;
+};
+
+const onStartFocus = () => {
+  timeType = 'FOCUS';
+  startTime = Date.now();
+  self.postMessage({ type: 'FOCUS', time: focusTime * 60, repeat: currentRepeat });
+  onUpdateTimer(focusTime * 60);
+};
+
+const onStartRest = () => {
+  timeType = 'REST';
+  startTime = Date.now();
+  self.postMessage({ type: 'REST', time: restTime * 60, repeat: currentRepeat });
+  onUpdateTimer(restTime * 60);
+};
+
+const onUpdateTimer = (totalTime) => {
+  const interval = setInterval(() => {
+    const remainingTime = calculateRemainingTime(totalTime);
+
+    if (isPause) {
+      clearInterval(interval);
+      return;
+    }
 
     self.postMessage({
       type: 'INTERVAL',
-      time: displayTime,
+      time: remainingTime,
       repeat: currentRepeat,
       timeType
     });
 
-    if (displayTime === 0) {
-      currentTime = 0;
+    if (remainingTime <= 0) {
+      clearInterval(interval);
       if (timeType === 'FOCUS') {
         onStartRest();
       } else if (repeatCount === currentRepeat + 1) {
@@ -57,23 +79,13 @@ const onStartTimer = () => {
   }, 1000);
 };
 
-const onStartFocus = () => {
-  timeType = 'FOCUS';
-  self.postMessage({ type: 'FOCUS', time: focusTime * 60, repeat: currentRepeat });
-};
-
-const onStartRest = () => {
-  timeType = 'REST';
-  self.postMessage({ type: 'REST', time: restTime * 60, repeat: currentRepeat });
-};
-
 const onPause = () => {
   if (isPause) {
-    onStartTimer();
+    const now = Date.now();
+    startTime += now - pausedTime;
   } else {
-    clearInterval(timer);
+    pausedTime = Date.now();
   }
-
   isPause = !isPause;
 };
 
@@ -87,10 +99,8 @@ const onComplete = () => {
 };
 
 const onResetTimer = () => {
-  clearInterval(timer);
   timeType = 'NONE';
-  timer = 0;
-  currentTime = 0;
+  startTime = 0;
   currentRepeat = 0;
   isPause = false;
   focusTime = 0;
