@@ -11,16 +11,3 @@ self.addEventListener('message', (event) => {
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
 });
-
-self.addEventListener('periodicsync', event => {
-  if (event.tag === 'timer-sync') {
-    event.waitUntil(syncTimer());
-  }
-});
-
-async function syncTimer() {
-  const clients = await self.clients.matchAll();
-  clients.forEach(client => {
-    client.postMessage({ type: 'SYNC_TIMER' });
-  });
-}
