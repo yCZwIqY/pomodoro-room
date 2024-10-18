@@ -12,9 +12,9 @@ function App() {
   const { initToken } = useTokenStore();
   const { initFurnitureData } = useMyFurnitureStore();
   const { init } = useMyBagStore();
-
+  
   const effectRan = useRef(false);
-
+  
   useEffect(() => {
     window.oncontextmenu = () => false;
     if (!effectRan.current) {
@@ -22,12 +22,24 @@ function App() {
       init();
       initFurnitureData();
     }
-
+    
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.getRegistrations()
+                 .then((registrations) => {
+                   registrations.forEach((registration) => {
+                     registration.unregister();
+                   });
+                   navigator.serviceWorker.register('/service-worker.js');
+                 });
+      });
+    }
+    
     return () => {
       effectRan.current = true;
     };
   }, []);
-
+  
   return (
     <ThemeProvider theme={theme}>
       <RouterProvider router={router} />
