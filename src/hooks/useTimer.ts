@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState, useEffect } from 'react';
+import {useCallback, useRef, useState, useEffect, useLayoutEffect} from 'react';
 import useTokenStore from "@store/useTokenStore.tsx";
 
 export interface TimerFormData {
@@ -52,6 +52,15 @@ const useTimer = (onCompleteRoutine: () => void) => {
           break;
       }
     };
+  }, []);
+
+  useLayoutEffect(() => {
+    workerRef.current = new Worker('/timer-worker.js');
+    return () => {
+      if (workerRef.current) {
+        workerRef.current.terminate();
+      }
+    }
   }, []);
 
   const getToken = useCallback(() => {
