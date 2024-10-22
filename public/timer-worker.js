@@ -2,7 +2,7 @@ let timeType = 'NONE';
 let startTime = 0;
 let pauseTime = 0;
 let elapsedTime = 0; // 일시정지 상태에서 경과한 시간을 저장
-let currentRepeat = 1;
+let currentRepeat = 0;
 let isPause = false;
 
 let focusTime = 0;
@@ -69,13 +69,13 @@ const updateTime = () => {
 
 const onStartFocus = () => {
   timeType = 'FOCUS';
-  self.postMessage({ type: 'FOCUS', time: focusTime * 60, repeat: currentRepeat });
+  self.postMessage({ type: 'FOCUS', time: focusTime * 60, repeat: currentRepeat + 1});
   startTimer();
 };
 
 const onStartRest = () => {
   timeType = 'REST';
-  self.postMessage({ type: 'REST', time: restTime * 60, repeat: currentRepeat });
+  self.postMessage({ type: 'REST', time: restTime * 60, repeat: currentRepeat + 1});
   startTimer();
 };
 
