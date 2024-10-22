@@ -56,7 +56,7 @@ const updateTime = () => {
   if (displayTime <= 0) {
     if (timeType === 'FOCUS') {
       onStartRest();
-    } else if (currentRepeat >= repeatCount) {
+    } else if (currentRepeat + 1 >= repeatCount) {
       onComplete();
     } else {
       currentRepeat++;
