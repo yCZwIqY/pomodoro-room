@@ -69,13 +69,13 @@ const updateTime = () => {
 
 const onStartFocus = () => {
   timeType = 'FOCUS';
-  self.postMessage({ type: 'FOCUS', time: focusTime * 60, repeat: currentRepeat + 1});
+  self.postMessage({ type: 'FOCUS', time: focusTime * 60, repeat: currentRepeat });
   startTimer();
 };
 
 const onStartRest = () => {
   timeType = 'REST';
-  self.postMessage({ type: 'REST', time: restTime * 60, repeat: currentRepeat + 1});
+  self.postMessage({ type: 'REST', time: restTime * 60, repeat: currentRepeat });
   startTimer();
 };
 
