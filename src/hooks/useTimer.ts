@@ -55,7 +55,6 @@ const useTimer = (onCompleteRoutine: () => void) => {
           setTimeType('NONE');
           onCompleteRoutine();
           addToken(getToken());
-          workerRef.current?.terminate();
           break;
         default:
           break;
