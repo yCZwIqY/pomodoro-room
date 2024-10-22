@@ -71,7 +71,7 @@ const useTimer = (onCompleteRoutine: () => void) => {
   }, []);
 
   const onStartTimer = (data: TimerFormData) => {
-    setRemainingTime(0.1* 60);
+    setRemainingTime(data.focusTime * 60);
     focusTime.current = data.focusTime
     repeatCount.current = data.repeatCount;
 
