@@ -1,5 +1,11 @@
-import {useCallback, useRef, useState, useEffect, useLayoutEffect} from 'react';
-import useTokenStore from "@store/useTokenStore.tsx";
+import {
+  useCallback,
+  useRef,
+  useState,
+  useEffect,
+  useLayoutEffect
+} from 'react';
+import useTokenStore from '@store/useTokenStore.tsx';
 
 export interface TimerFormData {
   focusTime: number;
@@ -31,7 +37,7 @@ const useTimer = (onCompleteRoutine: () => void) => {
           currentRepeatCount.current = data.repeat;
           break;
         case 'REST':
-          onPostMessage('휴식 시작', '휴식을 취할 시간입니다.')
+          onPostMessage('휴식 시작', '휴식을 취할 시간입니다.');
           setTimeType('REST');
           setRemainingTime(data.time);
           currentRepeatCount.current = data.repeat;
@@ -42,7 +48,10 @@ const useTimer = (onCompleteRoutine: () => void) => {
           currentRepeatCount.current = data.repeat;
           break;
         case 'COMPLETE':
-          onPostMessage('루틴 완료', '모든 루틴을 완료하셨습니다. 수고하셨어요!')
+          onPostMessage(
+            '루틴 완료',
+            '모든 루틴을 완료하셨습니다. 수고하셨어요!'
+          );
           setTimeType('NONE');
           onCompleteRoutine();
           addToken(getToken());
@@ -60,7 +69,7 @@ const useTimer = (onCompleteRoutine: () => void) => {
       if (workerRef.current) {
         workerRef.current.terminate();
       }
-    }
+    };
   }, []);
 
   const getToken = useCallback(() => {
@@ -72,7 +81,7 @@ const useTimer = (onCompleteRoutine: () => void) => {
 
   const onStartTimer = (data: TimerFormData) => {
     setRemainingTime(data.focusTime * 60);
-    focusTime.current = data.focusTime
+    focusTime.current = data.focusTime;
     repeatCount.current = data.repeatCount;
 
     workerRef.current?.postMessage({
@@ -82,7 +91,7 @@ const useTimer = (onCompleteRoutine: () => void) => {
 
     // 서비스 워커를 통해 알림 표시
     if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-      onPostMessage('루틴 시작', '뽀모도로 루틴을 시작합니다!')
+      onPostMessage('루틴 시작', '뽀모도로 루틴을 시작합니다!');
     }
   };
 
@@ -92,7 +101,7 @@ const useTimer = (onCompleteRoutine: () => void) => {
       message: title,
       body: body
     });
-  }
+  };
 
   const onPauseResume = () => {
     setIsPaused(!isPaused);

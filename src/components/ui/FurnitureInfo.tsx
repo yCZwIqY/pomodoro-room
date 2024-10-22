@@ -1,9 +1,9 @@
 import useEditModeStore from '@store/useEditModeStore.ts';
 import styled from 'styled-components';
-import {DetailContainer, SummaryContainer} from '@components/style.ts';
+import { DetailContainer, SummaryContainer } from '@components/style.ts';
 import useMyBagStore from '@store/useMyBagStore.ts';
-import {useDetailSummary} from '@hooks/useDetailSummary.ts';
-import IconButton from "@components/common/button/IconButton.tsx";
+import { useDetailSummary } from '@hooks/useDetailSummary.ts';
+import IconButton from '@components/common/button/IconButton.tsx';
 
 const FurnitureInfoContainer = styled(DetailContainer)<{
   $isOpen: boolean;
@@ -49,15 +49,15 @@ const ColorPicker = styled.input`
 const ColorText = styled.div`
   flex: 1;
   align-content: center;
-`
+`;
 const ColorInput = styled.input`
   width: 80px;
   outline: none;
   border: none;
   border-radius: 8px;
   padding: 5px;
-  box-shadow: inset 1px 1px 2px 0 rgba(0,0,0, 0.5);
-`
+  box-shadow: inset 1px 1px 2px 0 rgba(0, 0, 0, 0.5);
+`;
 
 const FurnitureInfoSummary = styled(SummaryContainer)``;
 export default function FurnitureInfo() {
@@ -95,10 +95,10 @@ export default function FurnitureInfo() {
       rotation: [
         tempPosition[lastClickedObject.id].rotation[0],
         (tempPosition[lastClickedObject.id].rotation[1] + 90) % 360,
-        tempPosition[lastClickedObject.id].rotation[2],
+        tempPosition[lastClickedObject.id].rotation[2]
       ]
-    })
-  }
+    });
+  };
 
   return (
     <>
@@ -115,8 +115,12 @@ export default function FurnitureInfo() {
                     <li key={part}>
                       <ColorText>{part}</ColorText>
                       <ColorInput
-                          value={tempPosition[lastClickedObject.id].currentColors![part]}
-                          onChange={e => onColorChange(part, e.target.value)}
+                        value={
+                          tempPosition[lastClickedObject.id].currentColors![
+                            part
+                          ]
+                        }
+                        onChange={(e) => onColorChange(part, e.target.value)}
                       />
                       <ColorPicker
                         type={'color'}
@@ -130,17 +134,25 @@ export default function FurnitureInfo() {
                     </li>
                   ))}
                 </ColorList>
-                <div style={{margin: '5px 0',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  marginTop: '10px',
-                  gap: '10px'}}>
-                  <IconButton url={'/icons/rotation.svg'}
-                              buttonColor={'blue'}
-                              onClick={onClickRotation}/>
-                  <IconButton url={'/icons/put.svg'}
-                              buttonColor={'red'}
-                              onClick={onPull}/>
+                <div
+                  style={{
+                    margin: '5px 0',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    marginTop: '10px',
+                    gap: '10px'
+                  }}
+                >
+                  <IconButton
+                    url={'/icons/rotation.svg'}
+                    buttonColor={'blue'}
+                    onClick={onClickRotation}
+                  />
+                  <IconButton
+                    url={'/icons/put.svg'}
+                    buttonColor={'red'}
+                    onClick={onPull}
+                  />
                 </div>
               </>
             ) : (

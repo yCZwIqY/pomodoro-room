@@ -74,11 +74,9 @@ export default function FurnitureModel({
   }, [nodes, objectRef]);
 
   const convertedRotation = () =>
-    tempPosition[data.id].rotation.map((it) => THREE.MathUtils.degToRad(it)) as [
-      number,
-      number,
-      number
-    ];
+    tempPosition[data.id].rotation.map((it) =>
+      THREE.MathUtils.degToRad(it)
+    ) as [number, number, number];
 
   const isSelected = useMemo(
     () => targetObject != null && targetObject === objectRef.current,

@@ -40,7 +40,7 @@ const startTimer = () => {
 };
 
 const updateTime = () => {
-  if(isPause || stopFlag) return;
+  if (isPause || stopFlag) return;
   const now = Date.now();
   elapsedTime = now - startTime;
   const totalTime = (timeType === 'FOCUS' ? focusTime : restTime) * 60;
@@ -69,13 +69,21 @@ const updateTime = () => {
 
 const onStartFocus = () => {
   timeType = 'FOCUS';
-  self.postMessage({ type: 'FOCUS', time: focusTime * 60, repeat: currentRepeat });
+  self.postMessage({
+    type: 'FOCUS',
+    time: focusTime * 60,
+    repeat: currentRepeat
+  });
   startTimer();
 };
 
 const onStartRest = () => {
   timeType = 'REST';
-  self.postMessage({ type: 'REST', time: restTime * 60, repeat: currentRepeat });
+  self.postMessage({
+    type: 'REST',
+    time: restTime * 60,
+    repeat: currentRepeat
+  });
   startTimer();
 };
 
@@ -92,11 +100,11 @@ const onPause = () => {
 
 const onStop = () => {
   onResetTimer();
-  stopFlag = true
+  stopFlag = true;
 };
 
 const onComplete = () => {
-  if(stopFlag) return;
+  if (stopFlag) return;
   self.postMessage({ type: 'COMPLETE' });
   onResetTimer();
 };
