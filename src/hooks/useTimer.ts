@@ -48,26 +48,18 @@ const useTimer = (onCompleteRoutine: () => void) => {
           currentRepeatCount.current = data.repeat;
           break;
         case 'COMPLETE':
-          onPostMessage(
-            '루틴 완료',
-            '모든 루틴을 완료하셨습니다. 수고하셨어요!'
-          );
-          setTimeType('NONE');
-          onCompleteRoutine();
-          addToken(getToken());
-          workerRef.current?.terminate();
+          if (timeType !== 'NONE') {
+            onPostMessage(
+              '루틴 완료',
+              '모든 루틴을 완료하셨습니다. 수고하셨어요!'
+            );
+            setTimeType('NONE');
+            onCompleteRoutine();
+            addToken(getToken());
+          }
           break;
         default:
           break;
-      }
-    };
-  }, []);
-
-  useLayoutEffect(() => {
-    workerRef.current = new Worker('/timer-worker.js');
-    return () => {
-      if (workerRef.current) {
-        workerRef.current.terminate();
       }
     };
   }, []);
