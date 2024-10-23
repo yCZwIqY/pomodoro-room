@@ -42,7 +42,7 @@ const startTimer = () => {
 };
 
 const updateTime = () => {
-  if (isPause || stopFlag) return;
+  if (isPause || stopFlag || endFlag) return;
   const now = Date.now();
   elapsedTime = now - startTime;
   const totalTime = (timeType === 'FOCUS' ? focusTime : restTime) * 60;
