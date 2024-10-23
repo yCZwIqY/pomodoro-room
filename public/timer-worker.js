@@ -10,6 +10,7 @@ let restTime = 0;
 let repeatCount = 0;
 let intervalId = null;
 let stopFlag = false;
+let endFlag = false;
 
 self.onmessage = ({ data }) => {
   switch (data.type) {
@@ -19,6 +20,7 @@ self.onmessage = ({ data }) => {
       restTime = data.data.restTime;
       repeatCount = data.data.repeatCount;
       stopFlag = false;
+      endFlag = false;
 
       onStartFocus();
       startTimer();
@@ -104,7 +106,8 @@ const onStop = () => {
 };
 
 const onComplete = () => {
-  if (stopFlag) return;
+  if (stopFlag || endFlag) return;
+  endFlag = true;
   self.postMessage({ type: 'COMPLETE' });
   onResetTimer();
 };
