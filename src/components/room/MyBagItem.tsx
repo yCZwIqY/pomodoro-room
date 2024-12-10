@@ -77,13 +77,11 @@ export default function MyBagItem({ data }: MyBagItemProps) {
     });
 
     pull(data.category, data.key);
-    pull(data.category, data.key);
   };
 
   const onCoveringMaterialClick = () => {
     const category = data.category as 'tile' | 'wallpaper';
 
-    console.log(category, tempCoveringMaterial);
     put(category, tempCoveringMaterial[category].key);
     pull(data.category, data.key);
     setTempCoveringMaterial(category, data);
