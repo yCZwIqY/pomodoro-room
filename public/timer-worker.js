@@ -21,7 +21,6 @@ self.onmessage = ({ data }) => {
       stopFlag = false;
 
       onStartFocus();
-      startTimer();
       return;
     case 'PAUSE_TIMER':
       onPause();
@@ -35,6 +34,9 @@ self.onmessage = ({ data }) => {
 };
 
 const startTimer = () => {
+  if (intervalId) {
+    clearInterval(intervalId);
+  }
   startTime = Date.now() - elapsedTime; // 일시정지 상태에서 경과한 시간을 보정
   intervalId = setInterval(updateTime, 1000);
 };
@@ -111,6 +113,7 @@ const onComplete = () => {
 
 const onResetTimer = () => {
   clearInterval(intervalId);
+  intervalId = null;
   timeType = 'NONE';
   startTime = 0;
   pauseTime = 0;

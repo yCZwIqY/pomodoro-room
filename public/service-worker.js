@@ -11,7 +11,8 @@ self.addEventListener('message', (event) => {
     self.registration.showNotification(event.data.message, {
       body: event.data.body,
       icon: '/pwa-64x64.png',
-      requireInteraction: true
+      requireInteraction: true,
+      tag: 'pomodoro-routine'
     });
   }
 });

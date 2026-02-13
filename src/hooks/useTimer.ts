@@ -1,10 +1,4 @@
-import {
-  useCallback,
-  useRef,
-  useState,
-  useEffect,
-  useLayoutEffect
-} from 'react';
+import { useCallback, useRef, useState, useEffect } from 'react';
 import useTokenStore from '@store/useTokenStore.tsx';
 
 export interface TimerFormData {
@@ -26,9 +20,10 @@ const useTimer = (onCompleteRoutine: () => void) => {
   const { addToken } = useTokenStore();
 
   useEffect(() => {
-    workerRef.current = new Worker('/timer-worker.js');
+    const worker = new Worker('/timer-worker.js');
+    workerRef.current = worker;
 
-    workerRef.current.onmessage = ({ data }) => {
+    worker.onmessage = ({ data }) => {
       switch (data.type) {
         case 'FOCUS':
           onPostMessage('집중 시작', '집중할 시간입니다.');
@@ -60,13 +55,10 @@ const useTimer = (onCompleteRoutine: () => void) => {
           break;
       }
     };
-  }, []);
-
-  useLayoutEffect(() => {
-    workerRef.current = new Worker('/timer-worker.js');
     return () => {
-      if (workerRef.current) {
-        workerRef.current.terminate();
+      worker.terminate();
+      if (workerRef.current === worker) {
+        workerRef.current = null;
       }
     };
   }, []);
@@ -95,6 +87,9 @@ const useTimer = (onCompleteRoutine: () => void) => {
   };
 
   const onPostMessage = (title, body) => {
+    if (!('serviceWorker' in navigator)) return;
+    if (!navigator.serviceWorker.controller) return;
+    if (Notification.permission !== 'granted') return;
     navigator.serviceWorker.controller.postMessage({
       type: 'SHOW_NOTIFICATION',
       message: title,
